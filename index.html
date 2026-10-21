@@ -46,7 +46,15 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 .feed{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
 .card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.1);}
 .thumbnail{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;cursor:pointer;}
-.post-image{width:100%;margin-top:8px;border-radius:6px;cursor:pointer;display:block;}
+.post-image{
+    width: calc(100% + 24px); 
+    margin-left: -12px; 
+    margin-right: -12px; 
+    margin-top: 8px; 
+    border-radius: 0; 
+    cursor: pointer; 
+    display: block;
+}
 
 .upload-box{display:none;background:white;padding:20px;margin-bottom:20px;border-radius:10px;box-shadow:0 1px 5px rgba(0,0,0,.1);position:relative;}
 .upload-box.show{display:block;}
