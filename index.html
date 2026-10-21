@@ -73,22 +73,33 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 .bottom-nav{display:none;}
 
 @media(max-width:800px){
-    header{gap:10px; padding:0 10px;}
-    .logo{display:none;} /* মোবাইলে লোগো লুকিয়ে যাবে */
-    .search{margin:0;} /* সার্চ বার জায়গা নিবে */
-    .search input{font-size:14px; padding:0 10px;}
-    .search button{width:40px;}
+    header{gap:8px; padding:0 10px;}
     
-    /* আপনার আগের বাকি কোডগুলো (sidebar, content, feed ইত্যাদি) এখানে থাকবে... */
+    /* লোগো ফিরিয়ে আনা হলো */
+    .logo{display:block; font-size:16px;} 
+    .menu{font-size:22px;}
+    
+    /* সার্চ বার ঠিকঠাক জায়গা নিবে */
+    .search{margin:0; flex:1; min-width:0;} 
+    .search input{font-size:13px; padding:0 10px; height:34px;}
+    .search button{width:35px; height:34px; padding:0;}
+    
+    /* কয়েন ডিসপ্লে লুকানো হলো */
+    .coin-display{display:none;} 
+    
+    .profile{font-size:22px;}
+    
     .sidebar{display:none;}
     .content{margin-left:0;width:100%;padding:10px;padding-bottom:75px;}
     .feed{grid-template-columns:1fr;gap:18px;}
+    
     .bottom-nav{position:fixed;display:flex;left:0;right:0;bottom:0;height:62px;background:white;border-top:1px solid #ddd;justify-content:space-around;align-items:center;z-index:200;}
     .bottom-nav button{border:0;background:white;font-size:12px;cursor:pointer;}
-    .coin-display{font-size:12px;padding:5px 10px;}
-    .coin-toast{right:10px;top:70px;font-size:13px;padding:10px 16px;}
+    
+    /* ক্যাটাগরির নিচের কালো দাগ লুকানোর কোড */
+    .categories { scrollbar-width: none; -ms-overflow-style: none; }
+    .categories::-webkit-scrollbar { display: none; }
 }
-
 .edit-post,.delete-post{border:0;padding:6px 12px;border-radius:18px;cursor:pointer;font-size:13px;margin-left:5px;}
 .edit-post{background:#fff3cd;color:#856404;}
 .delete-post{background:#ffe5e5;color:#c00;}
