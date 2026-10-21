@@ -110,6 +110,14 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     border-bottom: 1px solid #ddd; 
     margin-bottom: 0;
 }
+
+.post-image {
+    border-radius: 0; /* ছবির কোনা গোলাকার থাকবে না */
+    margin-left: -12px; /* বাম দিকের প্যাডিং বাতিল করবে */
+    margin-right: -12px; /* ডান দিকের প্যাডিং বাতিল করবে */
+    width: calc(100% + 24px); /* ছবির প্রস্থ বাড়িয়ে পুরো স্ক্রিন জুড়ে দেবে */
+}
+    
     
     .bottom-nav{position:fixed;display:flex;left:0;right:0;bottom:0;height:62px;background:white;border-top:1px solid #ddd;justify-content:space-around;align-items:center;z-index:200;}
     .bottom-nav button{border:0;background:white;font-size:12px;cursor:pointer;}
