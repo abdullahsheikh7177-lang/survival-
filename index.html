@@ -433,16 +433,26 @@ function renderProfile(){
     document.getElementById("profileRefCode").innerText = currentProfile.referral_code || "—";
     document.getElementById("profileFollowers").innerText = currentProfile.followers_count || 0;
     
-    // হেডারে প্রোফাইল ছবি দেখানোর কোড
-const headerProfileIcon = document.getElementById("headerProfileIcon");
-if (headerProfileIcon) {
-    if (currentProfile.avatar_url) {
-        headerProfileIcon.innerHTML = `<img src="${currentProfile.avatar_url}" class="header-avatar-img">`;
-    } else {
-        headerProfileIcon.innerHTML = `👤`;
+    // ১. প্রোফাইল পেজের বড় ছবি
+    const avatarImg = document.getElementById("profileAvatarImg");
+    if (avatarImg) {
+        if(currentProfile.avatar_url) {
+            avatarImg.src = currentProfile.avatar_url;
+        } else {
+            avatarImg.src = "https://via.placeholder.com/100?text=👤";
+        }
+    }
+
+    // ২. হেডারের ছোট ছবি
+    const headerProfileIcon = document.getElementById("headerProfileIcon");
+    if (headerProfileIcon) {
+        if (currentProfile.avatar_url) {
+            headerProfileIcon.innerHTML = `<img src="${currentProfile.avatar_url}" class="header-avatar-img">`;
+        } else {
+            headerProfileIcon.innerHTML = `👤`;
+        }
     }
 }
-
 window.uploadAvatar = async function(input) {
     if (!currentUser) { alert("আগে Login করুন।"); return; }
     const file = input.files[0];
