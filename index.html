@@ -100,8 +100,16 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     .profile{font-size:22px;}
     
     .sidebar{display:none;}
-    .content{margin-left:0;width:100%;padding:10px;padding-bottom:75px;}
-    .feed{grid-template-columns:1fr;gap:18px;}
+    .content{margin-left:0; width:100%; padding:0; padding-bottom:75px;}
+.feed{grid-template-columns:1fr; gap:8px;}
+
+/* মোবাইলে পোস্ট কার্ডগুলোকে ফেসবুকের মতো ফুল স্ক্রিন করতে */
+.card {
+    border-radius: 0; 
+    box-shadow: none; 
+    border-bottom: 1px solid #ddd; 
+    margin-bottom: 0;
+}
     
     .bottom-nav{position:fixed;display:flex;left:0;right:0;bottom:0;height:62px;background:white;border-top:1px solid #ddd;justify-content:space-around;align-items:center;z-index:200;}
     .bottom-nav button{border:0;background:white;font-size:12px;cursor:pointer;}
