@@ -1,0 +1,22 @@
+{
+  "name": "তথ্য সেবা",
+  "short_name": "তথ্য সেবা",
+  "description": "তথ্য সেবা — ছবি, ভিডিও ও প্রয়োজনীয় তথ্য শেয়ার করার প্ল্যাটফর্ম।",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00d878",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
