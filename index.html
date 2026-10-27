@@ -147,9 +147,12 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 @keyframes coinSlideIn{from{transform:translateX(400px);opacity:0;}to{transform:translateX(0);opacity:1;}}
 @keyframes coinFadeOut{to{transform:translateX(400px);opacity:0;}}
 </style>
-<link rel="icon" type="image/jpeg" href="./icon-512.jpg">
+<link rel="icon" type="image/png" href="./icon-512.png">
     
-<link rel="manifest" href="./manifest.json">
+<link rel="manifest" href="/manifest.json">
+
+<!-- নতুন যোগ করুন: মোবাইলে ব্রাউজারের উপরের বারের কালার আপনার অ্যাপের থিমের সাথে মিলিয়ে দেবে -->
+<meta name="theme-color" content="#00d878"> 
     
 </head>
 
@@ -1019,6 +1022,23 @@ window.rejectAdminRequest = async function(reqId) {
 
 
 </script>
+
+    <!-- Service Worker রেজিস্ট্রেশন -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      // নিশ্চিত করুন আপনার সার্ভারে 'sw.js' ফাইলটি আপলোড করা আছে
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function(err) {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
