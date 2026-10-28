@@ -173,6 +173,13 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         🪙 <span id="headerCoins">0</span>
     </div>
 <div class="profile" id="headerProfileIcon" onclick="openProfile()">👤</div>
+
+
+<button id="installAppBtn" hidden style="position: fixed; bottom: 80px; right: 20px; z-index: 1000; padding: 10px 20px; background: #00d878; color: white; border: none; border-radius: 20px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    📲 Install App
+</button>
+
+    
 </header>
 
 <div id="profilePanel" class="profile-panel">
@@ -1037,6 +1044,38 @@ window.rejectAdminRequest = async function(reqId) {
   }
 </script>
 
+
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById('installAppBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // ব্রাউজারের ডিফল্ট পপ-আপ বন্ধ করে নিজের বাটন দেখানো
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) {
+      installBtn.removeAttribute('hidden'); // বাটনটি দৃশ্যমান করা
+    }
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt(); // ইনস্টল পপ-আপ দেখানো
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to the install prompt: ${outcome}`);
+      deferredPrompt = null;
+      installBtn.setAttribute('hidden', ''); // ব্যবহারের পর বাটন লুকানো
+    });
+  }
+
+  // ইউজার অ্যাপটি ইনস্টল করলে বাটনটি সরিয়ে ফেলা
+  window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.setAttribute('hidden', '');
+  });
+</script>
+
+    
 </body>
 </html>
 
