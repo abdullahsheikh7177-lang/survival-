@@ -1,6 +1,6 @@
 {
-  "name": "তথ্য সেবা",
-  "short_name": "তথ্য সেবা",
+  "name": "survivalbd",
+  "short_name": "survivalbd",
   "description": "তথ্য সেবা — ছবি, ভিডিও ও প্রয়োজনীয় তথ্য শেয়ার করার প্ল্যাটফর্ম।",
   "start_url": "/",
   "scope": "/",
