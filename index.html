@@ -691,7 +691,7 @@ async function renderPost(feed, post){
         </div>
         <div class="actions">
             <button class="like ${userLiked ? 'liked' : ''}" onclick="likePost(this, '${post.id}')">👍 <span class="likeCount">${likeCount || 0}</span></button>
-            <button onclick="toggleComments(this)">💬 <span class="commentCount">${commentCount || 0}</span></button>
+            <button onclick="toggleComments(this, '${post.id}')">💬 <span class="commentCount">${commentCount || 0}</span></button>
             <button onclick="sharePost('${post.id}')">↗ <span class="shareCount">${post.shares || 0}</span></button>
         </div>
         <div class="comment-box">
@@ -702,14 +702,9 @@ async function renderPost(feed, post){
             <div class="comments"></div>
         </div>
     `;
-        // ... আগের কোড ...
-    `;
+        
     
-    // feed.appendChild(card);  <-- এই লাইনটি মুছে ফেলুন
-    
-    return card; // <-- এটি যোগ করুন
-
-    await loadComments(card, post.id);
+    return card; 
 }
 
 window.likePost = async function(button, postId){
@@ -729,9 +724,22 @@ window.likePost = async function(button, postId){
     } catch (err) { alert("Like: " + err.message); }
 };
 
-function toggleComments(button){
-    const box = button.closest(".card").querySelector(".comment-box");
-    box.style.display = box.style.display === "block" ? "none" : "block";
+async function toggleComments(button, postId){
+    const card = button.closest(".card");
+    const box = card.querySelector(".comment-box");
+    
+    // যদি কমেন্ট বক্স বন্ধ থাকে, তবে খুলবে এবং কমেন্ট লোড করবে
+    if (box.style.display !== "block") {
+        box.style.display = "block";
+        const commentsDiv = box.querySelector(".comments");
+        
+        // যদি আগে কমেন্ট লোড করা না থাকে, তবে ডাটাবেস থেকে লোড করা হবে
+        if (commentsDiv.innerHTML.includes("লোড হচ্ছে...") || commentsDiv.innerHTML.trim() === "") {
+            await loadComments(card, postId);
+        }
+    } else {
+        box.style.display = "none";
+    }
 }
 
 window.addComment = async function(button, postId){
