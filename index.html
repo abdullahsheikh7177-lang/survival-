@@ -636,7 +636,11 @@ async function loadPosts(){
         }
         
         // সব পোস্ট একসাথে লোড হবে, একটি অন্যটার জন্য অপেক্ষা করবে না
-await Promise.all(posts.map(post => renderPost(feed, post)));
+// ১. প্রথমে সব পোস্ট একসাথে প্রসেস হবে (ফাস্ট লোডিং)
+const renderedCards = await Promise.all(posts.map(post => renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap)));
+
+// ২. এরপর রেসপন্স আসার সিরিয়াল অনুযায়ী সেগুলো স্ক্রিনে বসবে
+renderedCards.forEach(card => feed.appendChild(card));
         
     } catch (err) { 
         console.error("LOAD POSTS:", err); 
