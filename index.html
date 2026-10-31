@@ -635,7 +635,8 @@ async function loadPosts(){
             return;
         }
         
-        for (const post of posts) await renderPost(feed, post);
+        // সব পোস্ট একসাথে লোড হবে, একটি অন্যটার জন্য অপেক্ষা করবে না
+await Promise.all(posts.map(post => renderPost(feed, post)));
         
     } catch (err) { 
         console.error("LOAD POSTS:", err); 
