@@ -634,13 +634,39 @@ async function loadPosts(){
             isLoadingPosts = false;
             return;
         }
-        
-        // সব পোস্ট একসাথে লোড হবে, একটি অন্যটার জন্য অপেক্ষা করবে না
-// ১. প্রথমে সব পোস্ট একসাথে প্রসেস হবে (ফাস্ট লোডিং)
-const renderedCards = await Promise.all(posts.map(post => renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap)));
 
-// ২. এরপর রেসপন্স আসার সিরিয়াল অনুযায়ী সেগুলো স্ক্রিনে বসবে
-renderedCards.forEach(card => feed.appendChild(card));
+        // ১. সব পোস্টের ডাটা একবারে নিয়ে আসা (এই অংশটি আপনার মিসিং ছিল)
+        const postIds = posts.map(p => p.id);
+        const userIds = [...new Set(posts.map(p => p.user_id))];
+
+        const [likesRes, commentsRes, profilesRes] = await Promise.all([
+            sb.from("likes").select("post_id, user_id").in("post_id", postIds),
+            sb.from("comments").select("post_id").in("post_id", postIds),
+            sb.from("profiles").select("id, avatar_url").in("id", userIds)
+        ]);
+
+        // ২. দ্রুত লোড করার জন্য ম্যাপ তৈরি করা
+        const likesData = likesRes.data || [];
+        const likeCountMap = {};
+        const userLikedMap = {};
+        likesData.forEach(l => {
+            likeCountMap[l.post_id] = (likeCountMap[l.post_id] || 0) + 1;
+            if (currentUser && l.user_id === currentUser.id) userLikedMap[l.post_id] = true;
+        });
+
+        const commentCountMap = {};
+        (commentsRes.data || []).forEach(c => {
+            commentCountMap[c.post_id] = (commentCountMap[c.post_id] || 0) + 1;
+        });
+
+        const avatarMap = {};
+        (profilesRes.data || []).forEach(p => avatarMap[p.id] = p.avatar_url);
+
+        // ৩. পোস্ট রেন্ডার করা
+        const renderedCards = await Promise.all(posts.map(post => renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap)));
+        
+        // ৪. সিরিয়ালি স্ক্রিনে বসানো
+        renderedCards.forEach(card => feed.appendChild(card));
         
     } catch (err) { 
         console.error("LOAD POSTS:", err); 
@@ -648,8 +674,7 @@ renderedCards.forEach(card => feed.appendChild(card));
         isLoadingPosts = false;
     }
 }
-
-async function renderPost(feed, post){
+async function renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap){
     const card = document.createElement("div");
     card.className = "card firebase-post";
     card.dataset.postId = post.id;
@@ -657,19 +682,14 @@ async function renderPost(feed, post){
     card.dataset.title = post.title || "";
     const isOwner = currentUser && post.user_id === currentUser.id;
     
-    const { count: likeCount } = await sb.from("likes").select("*", { count: "exact", head: true }).eq("post_id", post.id);
-    let userLiked = false;
-    if (currentUser) {
-        const { data: myLike } = await sb.from("likes").select("id").eq("post_id", post.id).eq("user_id", currentUser.id).maybeSingle();
-        userLiked = !!myLike;
-    }
-    
-    const { count: commentCount } = await sb.from("comments").select("*", { count: "exact", head: true }).eq("post_id", post.id);
-    
-    let authorAvatar = "https://via.placeholder.com/40?text=👤";
-    if (post.user_id) {
-        const { data: author } = await sb.from("profiles").select("avatar_url").eq("id", post.user_id).single();
-        if (author && author.avatar_url) authorAvatar = author.avatar_url;
+    const likeCount = likeCountMap[post.id] || 0;
+    const userLiked = userLikedMap[post.id] || false;
+    const commentCount = commentCountMap[post.id] || 0;
+    const authorAvatar = avatarMap[post.user_id] || "https://via.placeholder.com/40?text=👤";
+
+    let imageUrlOptimized = "";
+    if(post.image_url) {
+        imageUrlOptimized = post.image_url.includes('?') ? post.image_url + '&width=500' : post.image_url + '?width=500';
     }
 
     card.innerHTML = `
@@ -686,12 +706,12 @@ async function renderPost(feed, post){
         <div class="post">
             <div class="title">${escapeHTML(post.title || "")}</div>
             <div class="description">${escapeHTML(post.description || "")}</div>
-            ${post.image_url ? `<img src="${escapeHTML(post.image_url)}" class="post-image" onclick="addView('${post.id}')">` : ""}
+            ${post.image_url ? `<img src="${imageUrlOptimized}" loading="lazy" class="post-image" onclick="addView('${post.id}')">` : ""}
             <div class="views">👁 <span class="viewCount">${post.views || 0}</span></div>
         </div>
         <div class="actions">
-            <button class="like ${userLiked ? 'liked' : ''}" onclick="likePost(this, '${post.id}')">👍 <span class="likeCount">${likeCount || 0}</span></button>
-            <button onclick="toggleComments(this, '${post.id}')">💬 <span class="commentCount">${commentCount || 0}</span></button>
+            <button class="like ${userLiked ? 'liked' : ''}" onclick="likePost(this, '${post.id}')">👍 <span class="likeCount">${likeCount}</span></button>
+            <button onclick="toggleComments(this, '${post.id}')">💬 <span class="commentCount">${commentCount}</span></button>
             <button onclick="sharePost('${post.id}')">↗ <span class="shareCount">${post.shares || 0}</span></button>
         </div>
         <div class="comment-box">
@@ -699,14 +719,11 @@ async function renderPost(feed, post){
                 <input class="comment-input" type="text" placeholder="মন্তব্য লিখুন...">
                 <button class="comment-send" onclick="addComment(this, '${post.id}')">Send</button>
             </div>
-            <div class="comments"></div>
+            <div class="comments"><small>লোড হচ্ছে...</small></div>
         </div>
     `;
-        
-    
     return card; 
 }
-
 window.likePost = async function(button, postId){
     if (!currentUser) { alert("আগে Login করুন।"); return; }
     try {
