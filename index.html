@@ -702,7 +702,13 @@ async function renderPost(feed, post){
             <div class="comments"></div>
         </div>
     `;
-    feed.appendChild(card);
+        // ... আগের কোড ...
+    `;
+    
+    // feed.appendChild(card);  <-- এই লাইনটি মুছে ফেলুন
+    
+    return card; // <-- এটি যোগ করুন
+}
     await loadComments(card, post.id);
 }
 
