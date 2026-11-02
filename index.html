@@ -1129,28 +1129,46 @@ window.rejectAdminRequest = async function(reqId) {
 // শেয়ার করা ডাটা থাকলে অটোমেটিক ফর্ম ফিল হবে
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
+    
+    // ১. URL থেকে ডাটা নিয়ে সেভ করে রাখা (যাতে রিলোড দিলেও না হারায়)
     if (params.has('shared_title') || params.has('shared_text') || params.has('shared_url')) {
+        const sharedData = {
+            title: params.get('shared_title') || '',
+            text: params.get('shared_text') || '',
+            url: params.get('shared_url') || ''
+        };
+        sessionStorage.setItem('pwa_shared_data', JSON.stringify(sharedData));
+        window.history.replaceState({}, document.title, "/");
+    }
+
+    // ২. সেশন স্টোরেজ থেকে ডাটা নিয়ে ফর্ম ফিল করা
+    const savedData = sessionStorage.getItem('pwa_shared_data');
+    if (savedData) {
+        const data = JSON.parse(savedData);
         
-        // আপলোড ফর্মটি ওপেন করা
         const uploadBox = document.querySelector(".upload-box");
         if (uploadBox) uploadBox.classList.add("show");
 
         const titleInput = document.getElementById("postTitle");
         const descInput = document.getElementById("postDescription");
 
-        let sharedTitle = params.get('shared_title') || '';
-        let sharedText = params.get('shared_text') || '';
-        let sharedUrl = params.get('shared_url') || '';
+        let finalTitle = data.title || (data.text.length < 50 ? data.text : ''); 
+        let finalDesc = data.text || '';
+        
+        if (data.url) {
+            if (!finalDesc.includes(data.url)) {
+                finalDesc += (finalDesc ? "\n" : "") + data.url;
+            }
+        }
 
-        if (titleInput) titleInput.value = sharedTitle;
-        
-        let finalDesc = sharedText;
-        if (sharedUrl) finalDesc += "\n" + sharedUrl;
-        
+        if (titleInput) titleInput.value = finalTitle.trim();
         if (descInput) descInput.value = finalDesc.trim();
         
-        // URL থেকে প্যারামিটারগুলো মুছে ফেলা
-        window.history.replaceState({}, document.title, "/");
+        // ফর্ম ফিল হওয়ার পর ডাটা মুছে ফেলা
+        sessionStorage.removeItem('pwa_shared_data');
+        
+        // স্ক্রল করে ফর্মের দিকে নিয়ে যাওয়া
+        if (uploadBox) uploadBox.scrollIntoView({behavior:"smooth", block:"start"});
     }
 });
     
