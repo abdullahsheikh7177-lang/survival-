@@ -1109,6 +1109,36 @@ window.rejectAdminRequest = async function(reqId) {
   window.addEventListener('appinstalled', () => {
     if (installBtn) installBtn.setAttribute('hidden', '');
   });
+
+
+// শেয়ার করা ডাটা থাকলে অটোমেটিক ফর্ম ফিল হবে
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('shared_title') || params.has('shared_text') || params.has('shared_url')) {
+        
+        // আপলোড ফর্মটি ওপেন করা
+        const uploadBox = document.querySelector(".upload-box");
+        if (uploadBox) uploadBox.classList.add("show");
+
+        const titleInput = document.getElementById("postTitle");
+        const descInput = document.getElementById("postDescription");
+
+        let sharedTitle = params.get('shared_title') || '';
+        let sharedText = params.get('shared_text') || '';
+        let sharedUrl = params.get('shared_url') || '';
+
+        if (titleInput) titleInput.value = sharedTitle;
+        
+        let finalDesc = sharedText;
+        if (sharedUrl) finalDesc += "\n" + sharedUrl;
+        
+        if (descInput) descInput.value = finalDesc.trim();
+        
+        // URL থেকে প্যারামিটারগুলো মুছে ফেলা
+        window.history.replaceState({}, document.title, "/");
+    }
+});
+    
 </script>
 
     
