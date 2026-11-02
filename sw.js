@@ -25,6 +25,24 @@ if (workbox.navigationPreload.isSupported()) {
 }
 
 self.addEventListener('fetch', (event) => {
+
+
+const url = new URL(event.request.url);
+
+if (url.pathname === '/share-target') {
+  event.respondWith((async () => {
+    const title = url.searchParams.get('title') || '';
+    const text = url.searchParams.get('text') || '';
+    const sharedUrl = url.searchParams.get('url') || '';
+    
+    // ডাটা নিয়ে সোজা index.html পেজে রিডাইরেক্ট করা
+    const redirectUrl = `/?shared_title=${encodeURIComponent(title)}&shared_text=${encodeURIComponent(text)}&shared_url=${encodeURIComponent(sharedUrl)}`;
+    return Response.redirect(redirectUrl, 303);
+  })());
+  return; // নিচের কোডে যাওয়া বন্ধ করবে
+}
+
+  
   if (event.request.mode === 'navigate') {
     event.respondWith((async () => {
       try {
