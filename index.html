@@ -779,8 +779,11 @@ async function renderPost(post, likeCountMap, userLikedMap, commentCountMap, ava
                 <div class="username">${escapeHTML(post.user_name || "ব্যবহারকারী")}</div>
                 <small>${new Date(post.created_at).toLocaleString("bn-BD")}</small>
             </div>
-            ${!isOwner ? `<button class="follow" data-user-id="${post.user_id || ''}" onclick="followUser(this)">Follow</button>` : ""}
-            ${isOwner ? `<button class="edit-post" onclick="editPost('${post.id}')">✏️</button>` : ""}
+            ${!isOwner ? `
+    <button class="follow" data-user-id="${post.user_id || ''}" onclick="followUser(this)">Follow</button>
+    <button onclick="openChatOverlay(); setTimeout(() => openChatRoom('${post.user_id}', '${escapeHTML(post.user_name)}'), 500);" style="background:#eee; border:1px solid #ccc; padding:6px 10px; border-radius:18px; cursor:pointer; font-size:13px; margin-left:5px;">💬 Message</button>
+` : ""}
+${isOwner ? `<button class="edit-post" onclick="editPost('${post.id}')">✏️</button>` : ""}
             ${isOwner ? `<button class="delete-post" onclick="deletePost('${post.id}')">🗑</button>` : ""}
         </div>
         <div class="post">
