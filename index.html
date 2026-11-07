@@ -1228,7 +1228,7 @@ window.openChatRoom = async function(userId, userName) {
 
     // রিয়েল-টাইম আপডেট চালু করা (Supabase Realtime)
     if (messageSubscription) sb.removeChannel(messageSubscription);
-    messageSubscription = sb.channel('custom-all-channel')
+    messageSubscription = sb.channel(`chat-${currentUser.id}-${userId}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
           const newMsg = payload.new;
           if ((newMsg.sender_id === currentUser.id && newMsg.receiver_id === currentChatUserId) ||
