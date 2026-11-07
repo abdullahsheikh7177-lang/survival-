@@ -156,6 +156,29 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 .coin-toast{position:fixed;top:80px;right:20px;background:linear-gradient(135deg,#ffd700,#ffa500);color:#333;padding:12px 20px;border-radius:25px;font-weight:bold;font-size:15px;box-shadow:0 4px 15px rgba(255,165,0,.5);z-index:9999;animation:coinSlideIn .3s ease,coinFadeOut .3s ease 2.7s forwards;}
 @keyframes coinSlideIn{from{transform:translateX(400px);opacity:0;}to{transform:translateX(0);opacity:1;}}
 @keyframes coinFadeOut{to{transform:translateX(400px);opacity:0;}}
+
+
+/* চ্যাট সিস্টেমের ডিজাইন */
+.chat-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
+.chat-container { background: white; width: 100%; max-width: 400px; height: 90vh; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+@media(max-width: 500px) { .chat-container { height: 100vh; border-radius: 0; } }
+.chat-header { background: #1677ff; color: white; padding: 15px; display: flex; align-items: center; gap: 10px; font-weight: bold; }
+.chat-header button { background: transparent; border: 0; color: white; font-size: 20px; cursor: pointer; }
+.chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
+.chat-footer { padding: 10px; background: white; border-top: 1px solid #ddd; display: flex; gap: 10px; }
+.chat-footer input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
+.chat-footer button { background: #1677ff; color: white; border: 0; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+.msg-bubble { max-width: 75%; padding: 10px 15px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+.msg-sent { align-self: flex-end; background: #1677ff; color: white; border-bottom-right-radius: 4px; }
+.msg-received { align-self: flex-start; background: #e4e6eb; color: black; border-bottom-left-radius: 4px; }
+.inbox-list { overflow-y: auto; flex: 1; background: white; }
+.inbox-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+.inbox-item:hover { background: #f5f5f5; }
+.inbox-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #ddd; }
+
+
+
+  
 </style>
 <link rel="icon" type="image/png" href="./icon-512.png">
     
@@ -334,6 +357,34 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     <button>📷<br>Photo</button>
     <button onclick="showProfile()">👤<br>Profile</button>
 </div>
+
+
+<!-- চ্যাট ইনবক্স এবং চ্যাট বক্সের HTML -->
+<div id="chatOverlay" class="chat-overlay">
+    <div class="chat-container">
+        <!-- চ্যাট হেডার -->
+        <div class="chat-header">
+            <button id="chatBackBtn" style="display:none;" onclick="showInbox()">←</button>
+            <span id="chatHeaderName">Messages</span>
+            <button style="margin-left:auto;" onclick="closeChatOverlay()">✕</button>
+        </div>
+        
+        <!-- ইনবক্স লিস্ট (যাদের সাথে চ্যাট হয়েছে) -->
+        <div id="inboxView" class="inbox-list">
+            <p style="text-align:center; padding:20px; color:#777;">লোড হচ্ছে...</p>
+        </div>
+
+        <!-- আসল চ্যাট বক্স -->
+        <div id="chatRoomView" style="display:none; flex-direction:column; flex:1; overflow:hidden;">
+            <div id="chatMessages" class="chat-body"></div>
+            <div class="chat-footer">
+                <input id="chatInput" type="text" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+  
 
 <script>
 if (typeof window.supabase === "undefined") {
@@ -1086,6 +1137,142 @@ window.rejectAdminRequest = async function(reqId) {
         alert('Error: ' + err.message);
     }
 };
+
+
+
+
+  // ================= CHAT SYSTEM LOGIC =================
+let currentChatUserId = null;
+let currentChatUserName = null;
+let messageSubscription = null; // রিয়েল-টাইম আপডেটের জন্য
+
+window.openChatOverlay = function() {
+    if (!currentUser) { alert("মেসেজ দেখতে আগে লগইন করুন।"); return; }
+    document.getElementById('chatOverlay').style.display = 'flex';
+    showInbox();
+};
+
+window.closeChatOverlay = function() {
+    document.getElementById('chatOverlay').style.display = 'none';
+    if (messageSubscription) { sb.removeChannel(messageSubscription); messageSubscription = null; }
+};
+
+// ইনবক্স লোড করা (কে কে মেসেজ করেছে)
+window.showInbox = async function() {
+    document.getElementById('inboxView').style.display = 'block';
+    document.getElementById('chatRoomView').style.display = 'none';
+    document.getElementById('chatBackBtn').style.display = 'none';
+    document.getElementById('chatHeaderName').innerText = "Messages";
+    
+    const inboxList = document.getElementById('inboxView');
+    inboxList.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">লোড হচ্ছে...</p>';
+
+    // আমার পাঠানো বা আমার কাছে আসা সব মেসেজ আনা
+    const { data: msgs, error } = await sb.from("messages")
+        .select("*")
+        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+        .order("created_at", { ascending: false });
+
+    if (error) { inboxList.innerHTML = "লোড হয়নি।"; return; }
+
+    // ইউনিক ইউজারদের আইডি বের করা
+    const chattedUserIds = new Set();
+    msgs.forEach(m => {
+        if (m.sender_id !== currentUser.id) chattedUserIds.add(m.sender_id);
+        if (m.receiver_id !== currentUser.id) chattedUserIds.add(m.receiver_id);
+    });
+
+    if (chattedUserIds.size === 0) {
+        inboxList.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">এখনো কোনো মেসেজ নেই। কারো পোস্টে "Message" বাটনে ক্লিক করে চ্যাট শুরু করুন!</p>';
+        return;
+    }
+
+    // প্রোফাইল থেকে ইউজারদের নাম ও ছবি আনা
+    const { data: profiles } = await sb.from("profiles").select("id, name, avatar_url").in("id", Array.from(chattedUserIds));
+    
+    inboxList.innerHTML = '';
+    if(profiles) {
+        profiles.forEach(profile => {
+            const div = document.createElement("div");
+            div.className = "inbox-item";
+            div.onclick = () => openChatRoom(profile.id, profile.name);
+            div.innerHTML = `
+                <img src="${profile.avatar_url || 'https://via.placeholder.com/50?text=👤'}" class="inbox-avatar">
+                <div style="flex:1;">
+                    <b style="font-size:16px;">${escapeHTML(profile.name)}</b>
+                </div>
+            `;
+            inboxList.appendChild(div);
+        });
+    }
+};
+
+// নির্দিষ্ট কারো সাথে চ্যাট ওপেন করা
+window.openChatRoom = async function(userId, userName) {
+    currentChatUserId = userId;
+    currentChatUserName = userName;
+    
+    document.getElementById('inboxView').style.display = 'none';
+    document.getElementById('chatRoomView').style.display = 'flex';
+    document.getElementById('chatBackBtn').style.display = 'block';
+    document.getElementById('chatHeaderName').innerText = userName;
+    
+    await loadChatMessages();
+
+    // রিয়েল-টাইম আপডেট চালু করা (Supabase Realtime)
+    if (messageSubscription) sb.removeChannel(messageSubscription);
+    messageSubscription = sb.channel('custom-all-channel')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+          const newMsg = payload.new;
+          if ((newMsg.sender_id === currentUser.id && newMsg.receiver_id === currentChatUserId) ||
+              (newMsg.sender_id === currentChatUserId && newMsg.receiver_id === currentUser.id)) {
+              loadChatMessages(); // নতুন মেসেজ আসলে আবার লোড করবে
+          }
+      })
+      .subscribe();
+};
+
+// নির্দিষ্ট ইউজারের সাথে মেসেজ লোড করা
+async function loadChatMessages() {
+    const box = document.getElementById('chatMessages');
+    
+    const { data: msgs, error } = await sb.from("messages")
+        .select("*")
+        .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUserId}),and(sender_id.eq.${currentChatUserId},receiver_id.eq.${currentUser.id})`)
+        .order("created_at", { ascending: true });
+
+    if (error) return;
+
+    box.innerHTML = "";
+    msgs.forEach(msg => {
+        const isMe = msg.sender_id === currentUser.id;
+        const div = document.createElement("div");
+        div.className = `msg-bubble ${isMe ? 'msg-sent' : 'msg-received'}`;
+        div.innerText = msg.text;
+        box.appendChild(div);
+    });
+    box.scrollTop = box.scrollHeight;
+}
+
+// মেসেজ পাঠানো
+window.sendMessage = async function() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text || !currentChatUserId) return;
+
+    input.value = "";
+    const { error } = await sb.from("messages").insert({
+        sender_id: currentUser.id,
+        receiver_id: currentChatUserId,
+        text: text
+    });
+
+    if (error) { alert("মেসেজ পাঠানো যায়নি!"); return; }
+    await loadChatMessages();
+};
+
+// হেডারে চ্যাট বাটন যুক্ত করা (আপনার হেডার HTML-এ এটি যোগ করুন)
+// <div class="profile" onclick="openChatOverlay()">💬</div> (এটি Profile আইকনের পাশে দিন)
 
 
 
