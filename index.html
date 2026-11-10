@@ -444,6 +444,20 @@ sb.auth.onAuthStateChange(async (event, session) => {
             checkAdminStatus(); // <--- এখানে যোগ করুন
             
             await loadPosts();
+
+// নোটিফিকেশন থেকে আসা লিংক চেক করে চ্যাট ওপেন করা
+const params = new URLSearchParams(window.location.search);
+const chatWithId = params.get('chat_with');
+const chatWithName = params.get('name');
+
+if (chatWithId && chatWithName) {
+    window.history.replaceState({}, document.title, "/");
+    openChatOverlay();
+    setTimeout(() => {
+        openChatRoom(chatWithId, chatWithName);
+    }, 800);
+}
+          
         } else {
             showAuthBox();
             setMsg("আপনার Email Verify করুন। Inbox/Spam চেক করুন।");
@@ -1324,6 +1338,8 @@ window.subscribeUserToPush = async function() {
     });
 
     // ৪. Supabase-এ সেভ করা
+
+    await sb.from('push_subscriptions').delete().eq('user_id', currentUser.id);
     const { error } = await sb.from('push_subscriptions').insert({
       user_id: currentUser.id,
       subscription: subscription.toJSON()
