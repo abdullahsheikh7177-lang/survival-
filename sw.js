@@ -71,12 +71,34 @@ self.addEventListener('push', function(event) {
   const title = data.title || 'তথ্য সেবা';
   const options = {
     body: data.body || 'নতুন আপডেট এসেছে!',
-    // এখানে sender-এর ছবিটি আইকন হিসেবে সেট হবে, না থাকলে ডিফল্ট আইকন
-    icon: data.icon || './icon-192.png', 
-    badge: './icon-192.png', // ফোনের স্ট্যাটাস বারে ছোট আইকন
+    icon: data.icon ? data.icon : './icon-192.png', // ছবি না থাকলে ডিফল্ট আইকন
+    image: data.icon ? data.icon : './icon-512.png', // বড় করে ছবি দেখানোর জন্য
+    badge: './icon-192.png',
     data: { url: data.url || '/' },
-    vibrate: [200, 100, 200, 100, 200] // নোটিফিকেশন আসলে ভাইব্রেট করবে (ব্রাউজার সাপোর্ট করলে)
+    vibrate: [200, 100, 200, 100, 200]
   };
   
   event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// নোটিফিকেশনে ক্লিক করলে অ্যাপ ওপেন করার লজিক
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  const urlToOpen = new URL(event.notification.data.url || '/', self.location.origin).href;
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      // যদি অ্যাপ আগে থেকেই ওপেন থাকে, তবে তাকে ফোকাস করবে
+      for (let i = 0; i < windowClients.length; i++) {
+        const client = windowClients[i];
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // না থাকলে নতুন উইন্ডোতে ওপেন করবে
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
 });
