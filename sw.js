@@ -65,19 +65,18 @@ if (url.pathname === '/share-target') {
 });
 
 
-self.addEventListener('push', (event) => {
+self.addEventListener('push', function(event) {
   const data = event.data ? event.data.json() : {};
+  
   const title = data.title || 'তথ্য সেবা';
   const options = {
     body: data.body || 'নতুন আপডেট এসেছে!',
-    icon: './icon-192.png',
-    badge: './icon-192.png',
-    data: { url: data.url || '/' }
+    // এখানে sender-এর ছবিটি আইকন হিসেবে সেট হবে, না থাকলে ডিফল্ট আইকন
+    icon: data.icon || './icon-192.png', 
+    badge: './icon-192.png', // ফোনের স্ট্যাটাস বারে ছোট আইকন
+    data: { url: data.url || '/' },
+    vibrate: [200, 100, 200, 100, 200] // নোটিফিকেশন আসলে ভাইব্রেট করবে (ব্রাউজার সাপোর্ট করলে)
   };
+  
   event.waitUntil(self.registration.showNotification(title, options));
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil(clients.openWindow(event.notification.data.url));
 });
