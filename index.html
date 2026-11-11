@@ -387,9 +387,10 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         <div id="chatRoomView" style="display:none; flex-direction:column; flex:1; overflow:hidden;">
             <div id="chatMessages" class="chat-body"></div>
             <div class="chat-footer">
-                <input id="chatInput" type="text" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key === 'Enter') sendMessage()">
-                <button onclick="sendMessage()">Send</button>
-            </div>
+    <button onclick="openTransferModal()" style="background:#ffd700; color:#333; padding:10px 15px; border-radius:50%; font-size:16px; border: none; cursor: pointer;" title="কয়েন পাঠান">🪙</button>
+    <input id="chatInput" type="text" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key === 'Enter') sendMessage()">
+    <button onclick="sendMessage()">Send</button>
+</div>
         </div>
     </div>
 </div>
@@ -408,6 +409,21 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     </div>
 </div>
 
+
+<!-- Coin Transfer Modal -->
+<div id="transferModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:20px; border-radius:10px; width:80%; max-width:320px; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <h3 style="margin-bottom:15px;">🪙 কয়েন পাঠান</h3>
+        <p id="transferReceiverName" style="margin-bottom:15px; font-weight:bold; color:#1677ff;"></p>
+        <input type="number" id="transferAmount" placeholder="কয়েনের পরিমাণ" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:5px; outline:none;">
+        <div style="display:flex; gap:10px;">
+            <button onclick="closeTransferModal()" style="flex:1; padding:10px; background:#ddd; border:none; border-radius:5px; cursor:pointer;">বাতিল</button>
+            <button onclick="executeCoinTransfer()" style="flex:1; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">পাঠান</button>
+        </div>
+    </div>
+</div>
+
+  
   
 
 <script>
@@ -1425,6 +1441,57 @@ window.openTransactionHistory = async function() {
         list.innerHTML = 'লোড করা যায়নি: ' + err.message;
     }
 };
+
+
+window.openTransferModal = function() {
+    if (!currentUser) { alert("আগে লগইন করুন।"); return; }
+    if (!currentChatUserId) { alert("প্রথমে কারো সাথে চ্যাট ওপেন করুন।"); return; }
+    
+    document.getElementById('transferReceiverName').innerText = "প্রাপক: " + currentChatUserName;
+    document.getElementById('transferAmount').value = "";
+    document.getElementById('transferModal').style.display = 'flex';
+};
+
+window.closeTransferModal = function() {
+    document.getElementById('transferModal').style.display = 'none';
+};
+
+window.executeCoinTransfer = async function() {
+    const amount = parseInt(document.getElementById('transferAmount').value);
+    
+    if (!amount || amount <= 0) {
+        alert("❌ সঠিক পরিমাণ লিখুন (কমপক্ষে ১ কয়েন)।");
+        return;
+    }
+
+    if (!confirm(`${amount} কয়েন ${currentChatUserName}-কে পাঠাতে চান?`)) return;
+
+    try {
+        // Supabase RPC কল করা (আপনার তৈরি করা SQL ফাংশনটি)
+        const { data, error } = await sb.rpc('transfer_coins', {
+            p_receiver_id: currentChatUserId,
+            p_amount: amount
+        });
+
+        if (error) {
+            let errorMsg = error.message || "কয়েন পাঠানো যায়নি।";
+            errorMsg = errorMsg.replace('ERROR: ', '').replace('P0001: ', ''); 
+            alert("❌ " + errorMsg);
+            return;
+        }
+
+        if (data === 'SUCCESS') {
+            alert(`✅ সফলভাবে ${amount} কয়েন পাঠানো হয়েছে!`);
+            closeTransferModal();
+            await updateHeaderCoinCount(); // হেডারের কয়েন আপডেট
+            await loadProfile(); // প্রোফাইল আপডেট
+        }
+    } catch (err) {
+        console.error("Transfer Error:", err);
+        alert("❌ কয়েন পাঠানো যায়নি: " + err.message);
+    }
+};
+
   
 </script>
 
