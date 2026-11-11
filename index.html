@@ -393,6 +393,21 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         </div>
     </div>
 </div>
+
+
+<!-- Transaction History Modal -->
+<div id="historyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:400px; max-height:80vh; display:flex; flex-direction:column; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+            <h3 style="margin:0;">📜 লেনদেনের ইতিহাস</h3>
+            <button onclick="document.getElementById('historyModal').style.display='none'" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+        </div>
+        <div id="historyList" style="overflow-y:auto; flex:1;">
+            <p style="text-align:center; color:#777;">লোড হচ্ছে...</p>
+        </div>
+    </div>
+</div>
+
   
 
 <script>
