@@ -1381,6 +1381,51 @@ window.subscribeUserToPush = async function() {
 };
   
 
+window.openTransactionHistory = async function() {
+    if (!currentUser) { alert("আগে লগইন করুন।"); return; }
+    
+    document.getElementById('historyModal').style.display = 'flex';
+    const list = document.getElementById('historyList');
+    list.innerHTML = '<p style="text-align:center; color:#777;">লোড হচ্ছে...</p>';
+
+    try {
+        const { data, error } = await sb.from('coin_transactions')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        list.innerHTML = '';
+        if (!data || data.length === 0) {
+            list.innerHTML = '<p style="text-align:center; color:#777; padding:20px;">এখনো কোনো লেনদেন হয়নি।</p>';
+            return;
+        }
+
+        data.forEach(tx => {
+            const isPositive = tx.amount > 0;
+            const color = isPositive ? '#28a745' : '#dc3545'; // সবুজ (প্লাস) বা লাল (মাইনাস)
+            const sign = isPositive ? '+' : '';
+            const date = new Date(tx.created_at).toLocaleString('bn-BD');
+
+            const div = document.createElement('div');
+            div.style.cssText = 'padding:12px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;';
+            div.innerHTML = `
+                <div>
+                    <div style="font-weight:bold; color:#333; font-size:14px;">${escapeHTML(tx.description || 'লেনদেন')}</div>
+                    <div style="font-size:11px; color:#777; margin-top:4px;">${date}</div>
+                </div>
+                <div style="font-weight:bold; color:${color}; font-size:16px; white-space:nowrap;">${sign}${tx.amount} 🪙</div>
+            `;
+            list.appendChild(div);
+        });
+
+    } catch (err) {
+        console.error(err);
+        list.innerHTML = 'লোড করা যায়নি: ' + err.message;
+    }
+};
+  
 </script>
 
     <!-- Service Worker রেজিস্ট্রেশন -->
