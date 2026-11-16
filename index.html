@@ -1499,6 +1499,85 @@ window.executeCoinTransfer = async function() {
     }
 };
 
+
+
+
+    const ADSTERRA_SMARTLINK = "https://highcpmgate.com"; // আপনার অ্যাড লিংক দিন
+    const MAX_DAILY_CLICKS = 5;
+    const REWARD_COINS = 5;
+    
+    const btn = document.getElementById("watch-ad-btn");
+    const statusText = document.getElementById("ad-status");
+
+    async function checkAdAvailability() {
+        if (!currentUser) {
+            btn.disabled = true; btn.innerText = "আগে লগইন করুন"; return;
+        }
+        
+        const { data, error } = await sb.from('profiles').select('ad_clicks_today, last_ad_timestamp').eq('id', currentUser.id).single();
+        if (error || !data) return;
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        // ডেইলি কাউন্ট রিসেট লজিক (যদি পুরোনো দিন হয়)
+        // (সরলতার জন্য এখানে শুধু লিমিট চেক করা হচ্ছে)
+        
+        if (data.ad_clicks_today >= MAX_DAILY_CLICKS) {
+            btn.disabled = true; btn.style.backgroundColor = "#6c757d"; btn.innerText = "আজকের লিমিট শেষ";
+            statusText.innerText = "আগামীকাল আবার আসুন!"; return;
+        }
+
+        const now = Date.now();
+        const timePassedMin = (now - (data.last_ad_timestamp || 0)) / 60000;
+        if (data.last_ad_timestamp > 0 && timePassedMin < 30) {
+            btn.disabled = true; btn.style.backgroundColor = "#ffc107"; btn.style.color = "#000";
+            btn.innerText = `অপেক্ষা করুন (${Math.ceil(30 - timePassedMin)} মিনিট)`;
+            statusText.innerText = `আজকে দেখা হয়েছে: ${data.ad_clicks_today}/${MAX_DAILY_CLICKS} বার`;
+            return;
+        }
+
+        btn.disabled = false; btn.style.backgroundColor = "#28a745"; btn.style.color = "#fff";
+        btn.innerText = `🎬 বিজ্ঞাপন দেখে ${REWARD_COINS} কয়েন নিন`;
+        statusText.innerText = `আজকের বাকি সুযোগ: ${MAX_DAILY_CLICKS - data.ad_clicks_today} বার`;
+    }
+
+    function startAdWatch() {
+        window.open(ADSTERRA_SMARTLINK, "_blank");
+        btn.disabled = true; btn.style.backgroundColor = "#17a2b8";
+        let secondsLeft = 15;
+        btn.innerText = `বিজ্ঞাপন চলছে... (${secondsLeft}s)`;
+
+        const timer = setInterval(() => {
+            secondsLeft--;
+            btn.innerText = `বিজ্ঞাপন চলছে... (${secondsLeft}s)`;
+            if (secondsLeft <= 0) {
+                clearInterval(timer);
+                completeAdReward();
+            }
+        }, 1000);
+    }
+
+    async function completeAdReward() {
+        btn.innerText = "কয়েন যোগ হচ্ছে...";
+        // সরাসরি আপডেট না করে SQL ফাংশন কল করা হচ্ছে (যাতে হ্যাক না হয়)
+        const { data, error } = await sb.rpc('claim_ad_reward');
+        
+        if (error) {
+            alert("❌ " + error.message.replace('ERROR: ', ''));
+        } else if (data === 'SUCCESS') {
+            alert(`✅ অভিনন্দন! আপনার ${REWARD_COINS} কয়েন যোগ হয়েছে!`);
+            if(typeof updateHeaderCoinCount === 'function') updateHeaderCoinCount();
+        }
+        checkAdAvailability();
+    }
+
+    // অ্যাপ লোড হলে চেক করবে
+    window.addEventListener("load", () => {
+        if (currentUser) setTimeout(checkAdAvailability, 1500);
+    });
+
+
+  
+
   
 </script>
 
