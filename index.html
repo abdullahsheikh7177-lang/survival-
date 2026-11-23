@@ -1784,6 +1784,17 @@ window.submitOrder = async function() {
         document.getElementById('orderModal').style.display = 'none';
     }
 };
+
+
+
+window.showAll = function(){ 
+    document.getElementById('shopSection').style.display = 'none'; // শপ লুকানো
+    document.getElementById('feed').style.display = 'grid'; // পোস্ট দেখানো
+    document.querySelector('.categories').style.display = 'flex'; // ক্যাটাগরি দেখানো
+    document.querySelectorAll(".card").forEach(c => c.style.display = ""); 
+}
+
+
   
 </script>
 
