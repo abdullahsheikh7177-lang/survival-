@@ -1632,7 +1632,104 @@ window.executeCoinTransfer = async function() {
 
 
   
+let allProducts = []; // সব প্রোডাক্ট সেভ রাখার জন্য
+let currentOrderProductId = null;
 
+// ১. শপ ওপেন করা ও প্রোডাক্ট লোড করা
+window.openShop = async function() {
+    document.getElementById('shopSection').style.display = 'block';
+    // চাইলে এখানে আপনার অন্যান্য সেকশনগুলো (যেমন feed) লুকিয়ে দিতে পারেন
+    
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '<p style="grid-column: span 2; text-align:center;">লোড হচ্ছে...</p>';
+
+    const { data, error } = await sb.from('products').select('*').eq('is_active', true).order('created_at', { ascending: false });
+    
+    if (error) { grid.innerHTML = '<p>লোড করা যায়নি।</p>'; return; }
+    
+    allProducts = data || [];
+    renderProducts(allProducts);
+};
+
+// ২. প্রোডাক্ট কার্ড তৈরি করা
+function renderProducts(products) {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+    
+    if (products.length === 0) {
+        grid.innerHTML = '<p style="grid-column: span 2; text-align:center;">কোনো পণ্য নেই।</p>';
+        return;
+    }
+
+    products.forEach(prod => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:white; border-radius:10px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);';
+        card.innerHTML = `
+            <img src="${prod.image_url}" style="width:100%; height:140px; object-fit:cover; border-radius:8px;">
+            <div style="font-size:12px; color:#888; margin-top:5px;">${prod.category}</div>
+            <div style="font-weight:bold; font-size:14px; margin:5px 0; height:38px; overflow:hidden;">${prod.name}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                <span style="color:#ff007f; font-weight:bold; font-size:16px;">৳ ${prod.price}</span>
+                <button onclick="openOrderModal('${prod.id}', '${escapeHTML(prod.name)}', ${prod.price})" style="background:#ff5722; color:white; border:none; padding:6px 12px; border-radius:5px; font-size:12px; cursor:pointer;">কিনুন</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// ৩. ক্যাটাগরি ফিল্টার
+window.filterShop = function(category) {
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.style.background = 'white';
+        btn.style.color = 'black';
+    });
+    event.target.style.background = '#ff5722';
+    event.target.style.color = 'white';
+
+    if (category === 'All') {
+        renderProducts(allProducts);
+    } else {
+        const filtered = allProducts.filter(p => p.category === category);
+        renderProducts(filtered);
+    }
+};
+
+// ৪. অর্ডার মডাল ওপেন করা
+window.openOrderModal = function(id, name, price) {
+    if (!currentUser) { alert("অর্ডার করতে আগে লগইন করুন।"); return; }
+    currentOrderProductId = id;
+    document.getElementById('orderProductName').innerText = name;
+    document.getElementById('orderProductPrice').innerText = price;
+    document.getElementById('buyerName').value = currentProfile?.name || "";
+    document.getElementById('orderModal').style.display = 'flex';
+};
+
+// ৫. অর্ডার সাবমিট করা
+window.submitOrder = async function() {
+    const name = document.getElementById('buyerName').value.trim();
+    const phone = document.getElementById('buyerPhone').value.trim();
+    const address = document.getElementById('buyerAddress').value.trim();
+    const price = parseFloat(document.getElementById('orderProductPrice').innerText);
+
+    if (!name || !phone || !address) { alert("সব তথ্য পূরণ করুন।"); return; }
+
+    const { error } = await sb.from('orders').insert({
+        user_id: currentUser.id,
+        product_id: currentOrderProductId,
+        buyer_name: name,
+        phone: phone,
+        address: address,
+        total_price: price,
+        status: 'pending'
+    });
+
+    if (error) {
+        alert("❌ অর্ডার করা যায়নি: " + error.message);
+    } else {
+        alert("✅ অর্ডার সফল হয়েছে! আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।");
+        document.getElementById('orderModal').style.display = 'none';
+    }
+};
   
 </script>
 
