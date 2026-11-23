@@ -362,6 +362,29 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
             <button onclick="filterCategory('তথ্য',this)">তথ্য</button>
         </div>
 
+
+
+
+<!-- Shop Section -->
+<div id="shopSection" style="display:none; background:#f5f5f5; padding:10px; min-height:100vh;">
+    
+    <!-- ক্যাটাগরি স্ক্রল বার -->
+    <div style="display:flex; overflow-x:auto; gap:10px; padding-bottom:10px; margin-bottom:15px; scrollbar-width:none;">
+        <button onclick="filterShop('All')" class="cat-btn active" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">সব</button>
+        <button onclick="filterShop('পোশাক')" class="cat-btn" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">পোশাক</button>
+        <button onclick="filterShop('গাছ')" class="cat-btn" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">নার্সারি</button>
+        <button onclick="filterShop('কসমেটিকস')" class="cat-btn" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">কসমেটিকস</button>
+    </div>
+
+    <!-- প্রোডাক্ট গ্রিড -->
+    <div id="productGrid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;">
+        <!-- জাভাস্ক্রিপ্ট দিয়ে কার্ড তৈরি হবে -->
+    </div>
+</div>
+
+
+      
+
         <div class="feed" id="feed"></div>
     </main>
 </div>
@@ -430,6 +453,26 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     </div>
 </div>
 
+
+
+
+
+  <!-- Order Modal (অর্ডার ফর্ম) -->
+<div id="orderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:400px;">
+        <h3 id="orderProductName" style="margin-bottom:10px;">পণ্যের নাম</h3>
+        <p style="color:#ff007f; font-weight:bold; margin-bottom:15px;">দাম: <span id="orderProductPrice">0</span> ৳</p>
+        
+        <input type="text" id="buyerName" placeholder="আপনার নাম" value="" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px;">
+        <input type="tel" id="buyerPhone" placeholder="মোবাইল নম্বর" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px;">
+        <textarea id="buyerAddress" placeholder="সম্পূর্ণ ঠিকানা (গ্রাম/শহর, থানা, জেলা)" rows="3" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
+        
+        <div style="display:flex; gap:10px;">
+            <button onclick="document.getElementById('orderModal').style.display='none'" style="flex:1; padding:10px; background:#ddd; border:none; border-radius:5px;">বাতিল</button>
+            <button onclick="submitOrder()" style="flex:1; padding:10px; background:#28a745; color:white; border:none; border-radius:5px;">অর্ডার কনফার্ম করুন</button>
+        </div>
+    </div>
+</div>
 
 
 
