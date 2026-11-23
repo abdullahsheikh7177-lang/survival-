@@ -317,6 +317,26 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         <h2>👑 অ্যাডমিন প্যানেল</h2>
         <button onclick="closeAdminPanel()" style="background:#eee; border:0; padding:8px 15px; border-radius:5px; cursor:pointer;">← ফিরে যান</button>
     </div>
+
+
+
+
+<!-- Admin Panel-এ পণ্য যোগ করার ফর্ম -->
+<div style="background:#fff; padding:15px; border-radius:10px; margin-bottom:20px; border:1px solid #ddd;">
+    <h3>🛍️ নতুন পণ্য যোগ করুন</h3>
+    <input type="text" id="pName" placeholder="পণ্যের নাম" style="width:100%; padding:8px; margin:5px 0;">
+    <select id="pCategory" style="width:100%; padding:8px; margin:5px 0;">
+        <option value="পোশাক">পোশাক</option>
+        <option value="গাছ">নার্সারি (গাছ)</option>
+        <option value="কসমেটিকস">কসমেটিকস</option>
+    </select>
+    <input type="number" id="pPrice" placeholder="দাম (টাকা)" style="width:100%; padding:8px; margin:5px 0;">
+    <input type="file" id="pImage" accept="image/*" style="width:100%; padding:8px; margin:5px 0;">
+    <button onclick="addProduct()" style="background:#28a745; color:white; padding:10px; border:none; width:100%; border-radius:5px; margin-top:10px;">পণ্য যোগ করুন</button>
+</div>
+
+
+  
     <div id="adminRequestsList" style="display:flex; flex-direction:column; gap:10px;">
         Loading...
     </div>
@@ -1240,6 +1260,35 @@ window.approveAdminRequest = async function(reqId) {
     }
 };
 
+
+
+window.addProduct = async function() {
+    const name = document.getElementById('pName').value;
+    const category = document.getElementById('pCategory').value;
+    const price = parseFloat(document.getElementById('pPrice').value);
+    const file = document.getElementById('pImage').files[0];
+
+    if (!name || !price || !file) { alert("সব ঘর পূরণ করুন এবং ছবি দিন।"); return; }
+
+    // ১. ছবি আপলোড করা
+    const ext = file.name.split(".").pop();
+    const path = "product_" + Date.now() + "." + ext;
+    const { error: upErr } = await sb.storage.from("posts").upload(path, file); // 'posts' বাকেটে আপলোড করছি
+    if (upErr) { alert("ছবি আপলোড হয়নি: " + upErr.message); return; }
+
+    const { data: urlData } = sb.storage.from("posts").getPublicUrl(path);
+    
+    // ২. ডাটাবেসে সেভ করা
+    const { error } = await sb.from('products').insert({
+        name, category, price, image_url: urlData.publicUrl
+    });
+
+    if (error) alert("পণ্য যোগ হয়নি: " + error.message);
+    else alert("✅ পণ্য সফলভাবে যোগ হয়েছে!");
+};
+
+
+  
 window.rejectAdminRequest = async function(reqId) {
     const note = prompt("রিজেক্ট করার কারণ লিখুন:");
     if (note === null) return; 
