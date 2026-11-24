@@ -5,16 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>তথ্য সেবা</title>
 <!-- Supabase লোড করার শক্তিশালী পদ্ধতি -->
-<script>
-  window.supabaseLoaded = false;
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="window.supabaseLoaded = true"></script>
-<!-- যদি jsDelivr ফেইল করে, তবে বিকল্প CDN থেকে লোড হবে -->
-<script>
-  if (!window.supabaseLoaded) {
-    document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
-  }
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.3/supabase.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;}
@@ -528,24 +519,27 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
   
 
 <script>
-if (typeof window.supabase === "undefined") {
-    document.getElementById("loadError").style.display = "block";
-    throw new Error("Supabase library not loaded");
-}
-
-const SUPABASE_URL = "https://klfkhciripeisvbonvgi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsZmtoY2lyaXBlaXN2Ym9udmdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MDExNTUsImV4cCI6MjEwNzM3NzE1NX0.eREJbBhM6M5LCm3mZ7-PtAP4yI6nFZSQFPzdp9xXpKQ";
-
 let sb, currentUser = null, currentProfile = null;
 let isLoadingPosts = false;
 
-try {
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} catch (e) {
-    document.getElementById("loadError").style.display = "block";
-    document.getElementById("loadError").innerText = "⚠️ Init error: " + e.message;
-    throw e;
-}
+// Supabase লোড হতে সময় দিন (DOM লোড হওয়ার পর চেক করবে)
+window.addEventListener('DOMContentLoaded', () => {
+    if (typeof window.supabase === "undefined") {
+        document.getElementById("loadError").style.display = "block";
+        document.getElementById("loadError").innerText = "⚠️ Supabase লোড হয়নি। ইন্টারনেট বা VPN পরিবর্তন করে রিফ্রেশ দিন।"; 
+        return; // এখানে থেমে যাবে, কিন্তু পুরো কোড ক্র্যাশ করবে না
+    }
+
+    const SUPABASE_URL = "https://klfkhciripeisvbonvgi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsZmtoY2lyaXBlaXN2Ym9udmdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MDExNTUsImV4cCI6MjEwNzM3NzE1NX0.eREJbBhM6M5LCm3mZ7-PtAP4yI6nFZSQFPzdp9xXpKQ";
+
+    try {
+        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+        document.getElementById("loadError").style.display = "block";
+        document.getElementById("loadError").innerText = "⚠️ Init error: " + e.message;
+    }
+});
 
 function escapeHTML(text){
     const div = document.createElement("div");
