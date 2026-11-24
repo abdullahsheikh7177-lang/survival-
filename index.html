@@ -595,43 +595,6 @@ if (sb) {
     });
 }
 
-sb.auth.onAuthStateChange(async (event, session) => {
-    currentUser = session?.user || null;
-    if (currentUser) {
-        await loadProfile();
-        if (currentUser.email_confirmed_at) {
-            showUserProfile();
-            renderProfile();
-            await updateHeaderCoinCount();
-            
-            checkAdminStatus(); // <--- এখানে যোগ করুন
-            
-            await loadPosts();
-
-// নোটিফিকেশন থেকে আসা লিংক চেক করে চ্যাট ওপেন করা
-const params = new URLSearchParams(window.location.search);
-const chatWithId = params.get('chat_with');
-const chatWithName = params.get('name');
-
-if (chatWithId && chatWithName) {
-    window.history.replaceState({}, document.title, "/");
-    openChatOverlay();
-    setTimeout(() => {
-        openChatRoom(chatWithId, chatWithName);
-    }, 800);
-}
-          
-        } else {
-            showAuthBox();
-            setMsg("আপনার Email Verify করুন। Inbox/Spam চেক করুন।");
-        }
-    } else {
-        currentProfile = null;
-        showAuthBox();
-        document.getElementById("headerCoins").innerText = "0";
-        await loadPosts();
-    }
-});
 
 function showAuthBox(){
     document.getElementById("authBox").style.display = "block";
