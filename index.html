@@ -336,6 +336,20 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 </div>
 
 
+
+
+<!-- অর্ডার দেখার সেকশন -->
+<div style="background:#fff; padding:15px; border-radius:10px; margin-bottom:20px; border:1px solid #ddd;">
+    <h3>📦 নতুন অর্ডারসমূহ</h3>
+    <div id="adminOrdersList" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+        <p>লোড হচ্ছে...</p>
+    </div>
+</div>
+
+
+
+
+
   
     <div id="adminRequestsList" style="display:flex; flex-direction:column; gap:10px;">
         Loading...
@@ -1293,6 +1307,49 @@ window.addProduct = async function() {
 };
 
 
+
+// অ্যাডমিন প্যানেলে অর্ডার দেখানোর ফাংশন
+window.loadAdminOrders = async function() {
+    const list = document.getElementById('adminOrdersList');
+    if(!list) return;
+    list.innerHTML = 'লোড হচ্ছে...';
+
+    const { data: orders, error } = await sb.from('orders').select('*, products(name)').order('created_at', { ascending: false });
+
+    if (error) { list.innerHTML = 'অর্ডার লোড করা যায়নি।'; return; }
+
+    if (!orders || orders.length === 0) {
+        list.innerHTML = '<p>এখনো কোনো অর্ডার আসেনি।</p>';
+        return;
+    }
+
+    list.innerHTML = '';
+    orders.forEach(order => {
+        const div = document.createElement('div');
+        div.style.cssText = 'border:1px solid #ddd; padding:10px; border-radius:5px; background:#f9f9f9; font-size:14px;';
+        div.innerHTML = `
+            <p><b>👤 নাম:</b> ${escapeHTML(order.buyer_name)}</p>
+            <p><b>📞 ফোন:</b> ${escapeHTML(order.phone)}</p>
+            <p><b>📍 ঠিকানা:</b> ${escapeHTML(order.address)}</p>
+            <p><b>🛍️ পণ্য:</b> ${escapeHTML(order.products?.name || 'N/A')} (৳${order.total_price})</p>
+            <p><b>📌 স্ট্যাটাস:</b> <span style="color:red;">${order.status}</span></p>
+        `;
+        list.appendChild(div);
+    });
+};
+
+// অ্যাডমিন প্যানেল ওপেন করলে পণ্যের পাশাপাশি অর্ডারও লোড হবে
+const originalOpenAdminPanel = window.openAdminPanel;
+window.openAdminPanel = function() {
+    originalOpenAdminPanel();
+    loadAdminOrders(); // নতুন ফাংশনটি কল করা হলো
+};
+
+
+
+
+
+  
   
 window.rejectAdminRequest = async function(reqId) {
     const note = prompt("রিজেক্ট করার কারণ লিখুন:");
