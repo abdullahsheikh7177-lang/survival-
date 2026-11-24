@@ -519,17 +519,14 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
   
 
 <script>
-let sb, currentUser = null, currentProfile = null;
+let sb = null, currentUser = null, currentProfile = null;
 let isLoadingPosts = false;
 
-// Supabase লোড হতে সময় দিন (DOM লোড হওয়ার পর চেক করবে)
-window.addEventListener('DOMContentLoaded', () => {
-    if (typeof window.supabase === "undefined") {
-        document.getElementById("loadError").style.display = "block";
-        document.getElementById("loadError").innerText = "⚠️ Supabase লোড হয়নি। ইন্টারনেট বা VPN পরিবর্তন করে রিফ্রেশ দিন।"; 
-        return; // এখানে থেমে যাবে, কিন্তু পুরো কোড ক্র্যাশ করবে না
-    }
-
+// Supabase ক্লায়েন্ট তৈরি (সরাসরি)
+if (typeof window.supabase === "undefined") {
+    document.getElementById("loadError").style.display = "block";
+    document.getElementById("loadError").innerText = "⚠️ Supabase লোড হয়নি। ইন্টারনেট বা VPN পরিবর্তন করে রিফ্রেশ দিন।";
+} else {
     const SUPABASE_URL = "https://klfkhciripeisvbonvgi.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsZmtoY2lyaXBlaXN2Ym9udmdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MDExNTUsImV4cCI6MjEwNzM3NzE1NX0.eREJbBhM6M5LCm3mZ7-PtAP4yI6nFZSQFPzdp9xXpKQ";
 
@@ -539,7 +536,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById("loadError").style.display = "block";
         document.getElementById("loadError").innerText = "⚠️ Init error: " + e.message;
     }
-});
+}
 
 function escapeHTML(text){
     const div = document.createElement("div");
@@ -560,6 +557,43 @@ window.showCoinToast = function(message){
     updateHeaderCoinCount();
     setTimeout(() => toast.remove(), 3000);
 };
+
+// এখন sb তৈরি হয়েছে, তাই sb.auth কল করা নিরাপদ
+if (sb) {
+    sb.auth.onAuthStateChange(async (event, session) => {
+        currentUser = session?.user || null;
+        if (currentUser) {
+            await loadProfile();
+            if (currentUser.email_confirmed_at) {
+                showUserProfile();
+                renderProfile();
+                await updateHeaderCoinCount();
+                checkAdminStatus(); 
+                await loadPosts();
+
+                const params = new URLSearchParams(window.location.search);
+                const chatWithId = params.get('chat_with');
+                const chatWithName = params.get('name');
+
+                if (chatWithId && chatWithName) {
+                    window.history.replaceState({}, document.title, "/");
+                    openChatOverlay();
+                    setTimeout(() => {
+                        openChatRoom(chatWithId, chatWithName);
+                    }, 800);
+                }
+            } else {
+                showAuthBox();
+                setMsg("আপনার Email Verify করুন। Inbox/Spam চেক করুন।");
+            }
+        } else {
+            currentProfile = null;
+            showAuthBox();
+            document.getElementById("headerCoins").innerText = "0";
+            await loadPosts();
+        }
+    });
+}
 
 sb.auth.onAuthStateChange(async (event, session) => {
     currentUser = session?.user || null;
