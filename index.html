@@ -907,9 +907,13 @@ async function loadPosts(){
 (async () => {
     if (!sb) return;
 
-    const { data: { session } } = await sb.auth.getSession();
+    const { data, error } = await sb.auth.getSession();
 
-    if (!session) await loadPosts();
+    if (error) {
+        console.error("Session Error:", error);
+    }
+
+    await loadPosts();
 })();
     
 async function renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap){
