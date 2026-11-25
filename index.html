@@ -902,6 +902,16 @@ async function loadPosts(){
         isLoadingPosts = false;
     }
 }
+
+
+(async () => {
+    if (!sb) return;
+
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session) await loadPosts();
+})();
+    
 async function renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap){
     const card = document.createElement("div");
     card.className = "card firebase-post";
