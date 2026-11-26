@@ -845,59 +845,38 @@ async function loadPosts(){
     feed.innerHTML = '<p style="padding:20px; text-align:center;">ডাটাবেসে কানেক্ট হচ্ছে...</p>';
 
     try {
-        // শুধু পোস্ট আনছি
         const { data: posts, error } = await sb.from("posts").select("*").order("created_at", { ascending: false }).limit(50);
         
-        // যদি এরর আসে, স্ক্রিনে অ্যালার্ট দিয়ে দেখাবো
         if (error) {
             alert("❌ ডাটাবেস এরর: " + error.message);
             feed.innerHTML = '<p style="padding:20px; color:red;">এরর: ' + error.message + '</p>';
-            isLoadingPosts = false;
             return;
         }
 
         if (!posts || !posts.length) {
-            feed.innerHTML = '<p style="padding:20px; color:orange;">কোনো পোস্ট পাওয়া যায়নি (খালি ডাটাবেস বা RLS ব্লক)।</p>';
-            isLoadingPosts = false;
+            feed.innerHTML = '<p style="padding:20px; color:orange;">কোনো পোস্ট পাওয়া যায়নি।</p>';
             return;
         }
 
-        // পোস্ট পাওয়া গেলে সাকসেস মেসেজ
+        // টেস্ট করার জন্য alert
         alert("✅ সফল! " + posts.length + " টি পোস্ট পাওয়া গেছে।");
 
-        // ... এরপর বাকি কাজ (লাইক, কমেন্ট ম্যাপিং) একদম আগের মতোই হবে ...
-        document.querySelectorAll(".firebase-post").forEach(p => p.remove());
-        const postIds = posts.map(p => p.id);
-        const userIds = [...new Set(posts.map(p => p.user_id))];
+        feed.innerHTML = ""; // আগের লোডিং টেক্সট মুছে ফেলা
 
-        const [likesRes, commentsRes, profilesRes] = await Promise.all([
-            sb.from("likes").select("post_id, user_id").in("post_id", postIds),
-            sb.from("comments").select("post_id").in("post_id", postIds),
-            sb.from("profiles").select("id, avatar_url").in("id", userIds)
-        ]);
-
-        const likesData = likesRes.data || [];
-        const likeCountMap = {};
-        const userLikedMap = {};
-        likesData.forEach(l => {
-            likeCountMap[l.post_id] = (likeCountMap[l.post_id] || 0) + 1;
-            if (currentUser && l.user_id === currentUser.id) userLikedMap[l.post_id] = true;
+        posts.forEach(post => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <div class="post">
+                    <div class="title">${post.title || "শিরোনাম নেই"}</div>
+                    <div class="description">${post.description || "বিস্তারিত নেই"}</div>
+                </div>
+            `;
+            feed.appendChild(card);
         });
 
-        const commentCountMap = {};
-        (commentsRes.data || []).forEach(c => {
-            commentCountMap[c.post_id] = (commentCountMap[c.post_id] || 0) + 1;
-        });
-
-        const avatarMap = {};
-        (profilesRes.data || []).forEach(p => avatarMap[p.id] = p.avatar_url);
-
-        const renderedCards = await Promise.all(posts.map(post => renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap)));
-        renderedCards.forEach(card => feed.appendChild(card));
-        
     } catch (err) { 
         alert("❌ জাভাস্ক্রিপ্ট এরর: " + err.message);
-        console.error("LOAD POSTS:", err); 
     } finally {
         isLoadingPosts = false;
     }
