@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>তথ্য সেবা</title>
-<!-- Supabase লোড করার শক্তিশালী পদ্ধতি -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;}
@@ -16,47 +15,23 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 .search input{width:100%;height:40px;border:1px solid #aaa;border-right:0;border-radius:20px 0 0 20px;padding:0 15px;font-size:15px;outline:none;}
 .search button{width:55px;border:1px solid #aaa;border-radius:0 20px 20px 0;background:#eee;cursor:pointer;}
 .profile{font-size:24px;cursor:pointer;}
-
 .profile-panel{display:none;background:white;padding:20px;border-bottom:1px solid #ddd;}
 .profile-panel input,.profile-panel select{display:block;width:100%;max-width:360px;padding:10px;margin:7px 0;font-size:16px;}
 .profile-panel button{padding:9px 16px;margin:5px 0;cursor:pointer;}
 .profile-panel hr{margin:15px 0;}
 #authMessage{margin-top:10px;white-space:pre-line;padding:10px;background:#f0f0f0;border-radius:5px;min-height:20px;}
-
-.header-avatar-img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    vertical-align: middle;
-    border: 2px solid #1677ff;
-}
-    
-
+.header-avatar-img{width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;border:2px solid #1677ff;}
 .layout{display:flex;}
 .sidebar{width:220px;position:fixed;top:60px;bottom:0;background:white;border-right:1px solid #ddd;padding:15px;}
 .sidebar button{width:100%;border:0;background:white;padding:12px;text-align:left;font-size:15px;border-radius:8px;margin-bottom:4px;cursor:pointer;}
 .sidebar button:hover{background:#eee;}
-
 .content{margin-left:220px;width:calc(100% - 220px);padding:20px;}
-
 .categories{display:flex;gap:10px;overflow-x:auto;margin-bottom:20px;}
 .categories button{border:0;padding:8px 17px;border-radius:20px;white-space:nowrap;background:#e8e8e8;cursor:pointer;}
 .categories button.active{background:#222;color:white;}
-
 .feed{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
 .card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.1);}
-.thumbnail{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;cursor:pointer;}
-.post-image{
-    width: calc(100% + 24px); 
-    margin-left: -12px; 
-    margin-right: -12px; 
-    margin-top: 8px; 
-    border-radius: 0; 
-    cursor: pointer; 
-    display: block;
-}
-
+.post-image{width:calc(100% + 24px);margin:8px -12px 0;border-radius:0;cursor:pointer;display:block;}
 .upload-box{display:none;background:white;padding:20px;margin-bottom:20px;border-radius:10px;box-shadow:0 1px 5px rgba(0,0,0,.1);position:relative;}
 .upload-box.show{display:block;}
 .upload-box h2{margin-bottom:15px;}
@@ -64,142 +39,85 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
 .upload-box textarea{resize:vertical;}
 .upload-box button:not(.upload-close){padding:10px 20px;border:0;border-radius:7px;background:#1677ff;color:white;font-size:15px;cursor:pointer;}
 .upload-close{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:0;background:#ffe5e5;color:#c00;font-size:18px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
-.upload-close:hover{background:#ffcccc;}
-
 .user{padding:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.avatar{width:40px;height:40px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0;object-fit:cover;}
+.avatar{width:40px;height:40px;border-radius:50%;background:#ddd;flex-shrink:0;object-fit:cover;}
 .user-info{flex:1;min-width:80px;}
 .username{font-weight:bold;}
 .follow{border:0;background:#1677ff;color:white;padding:7px 13px;border-radius:18px;cursor:pointer;}
 .follow.following{background:#ddd;color:#222;}
-
 .post{padding:0 12px 10px;}
 .title{font-size:17px;font-weight:bold;line-height:1.4;}
 .description{color:#555;font-size:14px;margin-top:5px;line-height:1.5;}
 .views{color:#777;font-size:13px;margin-top:7px;}
-
 .actions{border-top:1px solid #eee;display:flex;justify-content:space-around;padding:7px 0;}
 .actions button{border:0;background:white;padding:8px;cursor:pointer;border-radius:8px;}
 .actions button:hover{background:#eee;}
 .like.liked{color:red;font-weight:bold;}
-
 .comment-box{display:none;padding:10px;border-top:1px solid #eee;}
 .comment-input{width:70%;padding:9px;border:1px solid #ccc;border-radius:6px;outline:none;}
 .comment-send{padding:9px 12px;border:0;background:#1677ff;color:white;border-radius:6px;cursor:pointer;}
 .comments{margin-top:10px;}
 .comment{background:#f2f2f2;padding:8px;border-radius:7px;margin-top:5px;font-size:14px;}
-
 .bottom-nav{display:none;}
-
-@media(max-width:800px){
-    header{gap:8px; padding:0 10px;}
-    
-    /* লোগো ফিরিয়ে আনা হলো */
-    .logo{display:block; font-size:16px;} 
-    .menu{font-size:22px;}
-    
-    /* সার্চ বার ঠিকঠাক জায়গা নিবে */
-    .search{margin:0; flex:1; min-width:0;} 
-    .search input{font-size:13px; padding:0 10px; height:34px;}
-    .search button{width:35px; height:34px; padding:0;}
-    
-    /* কয়েন ডিসপ্লে লুকানো হলো */
-    .coin-display{display:none;} 
-    
-    .profile{font-size:22px;}
-    
-    .sidebar{display:none;}
-    .content{margin-left:0; width:100%; padding:0; padding-bottom:75px;}
-.feed{grid-template-columns:1fr; gap:8px;}
-
-/* মোবাইলে পোস্ট কার্ডগুলোকে ফেসবুকের মতো ফুল স্ক্রিন করতে */
-.card {
-    border-radius: 0; 
-    box-shadow: none; 
-    border-bottom: 1px solid #ddd; 
-    margin-bottom: 0;
-}
-
-.post-image {
-    border-radius: 0; /* ছবির কোনা গোলাকার থাকবে না */
-    margin-left: -12px; /* বাম দিকের প্যাডিং বাতিল করবে */
-    margin-right: -12px; /* ডান দিকের প্যাডিং বাতিল করবে */
-    width: calc(100% + 24px); /* ছবির প্রস্থ বাড়িয়ে পুরো স্ক্রিন জুড়ে দেবে */
-}
-    
-    
-    .bottom-nav{position:fixed;display:flex;left:0;right:0;bottom:0;height:62px;background:white;border-top:1px solid #ddd;justify-content:space-around;align-items:center;z-index:200;}
-    .bottom-nav button{border:0;background:white;font-size:12px;cursor:pointer;}
-    
-    /* ক্যাটাগরির নিচের কালো দাগ লুকানোর কোড */
-    .categories { scrollbar-width: none; -ms-overflow-style: none; }
-    .categories::-webkit-scrollbar { display: none; }
-}
 .edit-post,.delete-post{border:0;padding:6px 12px;border-radius:18px;cursor:pointer;font-size:13px;margin-left:5px;}
 .edit-post{background:#fff3cd;color:#856404;}
 .delete-post{background:#ffe5e5;color:#c00;}
-
-.coin-display{background:linear-gradient(135deg,#ffd700,#ffa500);color:#333;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:14px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 5px rgba(255,165,0,.4);transition:transform .2s;}
-.coin-display:hover{transform:scale(1.05);}
-.coin-display.pulse{animation:coinPulse .5s ease;}
-@keyframes coinPulse{0%{transform:scale(1);}50%{transform:scale(1.25);box-shadow:0 4px 15px rgba(255,165,0,.8);}100%{transform:scale(1);}}
-
+.msg-btn{background:#eee;border:1px solid #ccc;padding:6px 10px;border-radius:18px;cursor:pointer;font-size:13px;margin-left:5px;}
+.coin-display{background:linear-gradient(135deg,#ffd700,#ffa500);color:#333;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:14px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 5px rgba(255,165,0,.4);}
 .coin-toast{position:fixed;top:80px;right:20px;background:linear-gradient(135deg,#ffd700,#ffa500);color:#333;padding:12px 20px;border-radius:25px;font-weight:bold;font-size:15px;box-shadow:0 4px 15px rgba(255,165,0,.5);z-index:9999;animation:coinSlideIn .3s ease,coinFadeOut .3s ease 2.7s forwards;}
 @keyframes coinSlideIn{from{transform:translateX(400px);opacity:0;}to{transform:translateX(0);opacity:1;}}
 @keyframes coinFadeOut{to{transform:translateX(400px);opacity:0;}}
-
-
-/* চ্যাট সিস্টেমের ডিজাইন */
-.chat-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
-.chat-container { background: white; width: 100%; max-width: 400px; height: 90vh; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-@media(max-width: 500px) { .chat-container { height: 100vh; border-radius: 0; } }
-.chat-header { background: #1677ff; color: white; padding: 15px; display: flex; align-items: center; gap: 10px; font-weight: bold; }
-.chat-header button { background: transparent; border: 0; color: white; font-size: 20px; cursor: pointer; }
-.chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
-.chat-footer { padding: 10px; background: white; border-top: 1px solid #ddd; display: flex; gap: 10px; }
-.chat-footer input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
-.chat-footer button { background: #1677ff; color: white; border: 0; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
-.msg-bubble { max-width: 75%; padding: 10px 15px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
-.msg-sent { align-self: flex-end; background: #1677ff; color: white; border-bottom-right-radius: 4px; }
-.msg-received { align-self: flex-start; background: #e4e6eb; color: black; border-bottom-left-radius: 4px; }
-.inbox-list { overflow-y: auto; flex: 1; background: white; }
-.inbox-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; cursor: pointer; }
-.inbox-item:hover { background: #f5f5f5; }
-.inbox-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #ddd; }
-
-
-
-  
+.chat-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;justify-content:center;align-items:center;}
+.chat-container{background:white;width:100%;max-width:400px;height:90vh;border-radius:10px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.3);}
+@media(max-width:500px){.chat-container{height:100vh;border-radius:0;}}
+.chat-header{background:#1677ff;color:white;padding:15px;display:flex;align-items:center;gap:10px;font-weight:bold;}
+.chat-header button{background:transparent;border:0;color:white;font-size:20px;cursor:pointer;}
+.chat-body{flex:1;padding:15px;overflow-y:auto;background:#f0f2f5;display:flex;flex-direction:column;gap:10px;}
+.chat-footer{padding:10px;background:white;border-top:1px solid #ddd;display:flex;gap:10px;}
+.chat-footer input{flex:1;padding:10px;border:1px solid #ccc;border-radius:20px;outline:none;}
+.chat-footer button{background:#1677ff;color:white;border:0;padding:10px 20px;border-radius:20px;cursor:pointer;}
+.msg-bubble{max-width:75%;padding:10px 15px;border-radius:18px;font-size:15px;line-height:1.4;word-wrap:break-word;}
+.msg-sent{align-self:flex-end;background:#1677ff;color:white;border-bottom-right-radius:4px;}
+.msg-received{align-self:flex-start;background:#e4e6eb;color:black;border-bottom-left-radius:4px;}
+.inbox-list{overflow-y:auto;flex:1;background:white;}
+.inbox-item{padding:15px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:15px;cursor:pointer;}
+.inbox-item:hover{background:#f5f5f5;}
+.inbox-avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;background:#ddd;}
+@media(max-width:800px){
+header{gap:8px;padding:0 10px;}
+.logo{display:block;font-size:16px;}
+.menu{font-size:22px;}
+.search{margin:0;flex:1;min-width:0;}
+.search input{font-size:13px;padding:0 10px;height:34px;}
+.search button{width:35px;height:34px;padding:0;}
+.coin-display{display:none;}
+.profile{font-size:22px;}
+.sidebar{display:none;}
+.content{margin-left:0;width:100%;padding:0;padding-bottom:75px;}
+.feed{grid-template-columns:1fr;gap:8px;}
+.card{border-radius:0;box-shadow:none;border-bottom:1px solid #ddd;}
+.bottom-nav{position:fixed;display:flex;left:0;right:0;bottom:0;height:62px;background:white;border-top:1px solid #ddd;justify-content:space-around;align-items:center;z-index:200;}
+.bottom-nav button{border:0;background:white;font-size:12px;cursor:pointer;}
+.categories{scrollbar-width:none;-ms-overflow-style:none;}
+.categories::-webkit-scrollbar{display:none;}
+}
 </style>
 <link rel="icon" type="image/png" href="./icon-512.png">
-    
 <link rel="manifest" href="/manifest.json">
-
-<!-- নতুন যোগ করুন: মোবাইলে ব্রাউজারের উপরের বারের কালার আপনার অ্যাপের থিমের সাথে মিলিয়ে দেবে -->
-<meta name="theme-color" content="#ffffff"> 
-
-
-
-    <!-- Open Graph Meta Tags for Social Sharing -->
-<meta property="og:title" content="তথ্য সেবা - ছবি, ভিডিও ও তথ্য শেয়ারিং প্ল্যাটফর্ম">
-<meta property="og:description" content="আপনার প্রয়োজনীয় তথ্য, ছবি ও ভিডিও এক জায়গায়। এখনই যুক্ত হোন!">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="তথ্য সেবা - ছবি, ভিডিও ও তথ্য শেয়ারিং প্ল্যাটফর্ম">
+<meta property="og:description" content="আপনার প্রয়োজনীয় তথ্য, ছবি ও ভিডিও এক জায়গায়। এখনই যুক্ত হোন!">
 <meta property="og:image" content="https://www.survivalbd.com/icon-512.png">
 <meta property="og:url" content="https://www.survivalbd.com/">
 <meta property="og:type" content="website">
-
-<!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="তথ্য সেবা">
-<meta name="twitter:description" content="ছবি, ভিডিও ও প্রয়োজনীয় তথ্য শেয়ার করার প্ল্যাটফর্ম।">
+<meta name="twitter:description" content="ছবি, ভিডিও ও প্রয়োজনীয় তথ্য শেয়ার করার প্ল্যাটফর্ম।">
 <meta name="twitter:image" content="https://www.survivalbd.com/icon-512.png">
-    
 </head>
-
 <body>
 
-<div id="loadError" style="display:none;background:#c00;color:white;padding:15px;font-size:16px;text-align:center;">
-    ⚠️ Supabase library load হয়নি। Internet connection চেক করুন।
-</div>
+<div id="loadError" style="display:none;background:#c00;color:white;padding:15px;font-size:16px;text-align:center;">⚠️ Supabase লোড হয়নি। ইন্টারনেট চেক করুন।</div>
 
 <header>
     <div class="menu">☰</div>
@@ -208,21 +126,10 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         <input id="searchInput" type="search" placeholder="তথ্য খুঁজুন...">
         <button onclick="searchPosts()">🔍</button>
     </div>
-    <div class="coin-display" onclick="openProfile()">
-        🪙 <span id="headerCoins">0</span>
-    </div>
-
-
-<div class="profile" onclick="openChatOverlay()" style="font-size:22px; margin-right:10px;">💬</div>
-  
-<div class="profile" id="headerProfileIcon" onclick="openProfile()">👤</div>
-
-
-<button id="installAppBtn" hidden style="position: fixed; bottom: 80px; right: 20px; z-index: 1000; padding: 10px 20px; background: #00d878; color: white; border: none; border-radius: 20px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-    📲 Install App
-</button>
-
-    
+    <div class="coin-display" onclick="openProfile()">🪙 <span id="headerCoins">0</span></div>
+    <div class="profile" onclick="openChatOverlay()" style="font-size:22px;margin-right:10px;">💬</div>
+    <div class="profile" id="headerProfileIcon" onclick="openProfile()">👤</div>
+    <button id="installAppBtn" hidden style="position:fixed;bottom:80px;right:20px;z-index:1000;padding:10px 20px;background:#00d878;color:white;border:none;border-radius:20px;font-size:16px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.2);">📲 Install App</button>
 </header>
 
 <div id="profilePanel" class="profile-panel">
@@ -243,15 +150,12 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     </div>
 
     <div id="userProfile" style="display:none;">
-        <!-- প্রোফাইল পিকচার সেকশন -->
-        <div style="text-align: center; margin-bottom: 15px;">
-            <img id="profileAvatarImg" src="https://via.placeholder.com/100?text=👤" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div style="text-align:center;margin-bottom:15px;">
+            <img id="profileAvatarImg" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:2px solid #ddd;box-shadow:0 2px 5px rgba(0,0,0,.1);">
             <br>
-            <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="uploadAvatar(this)">
-            <button onclick="document.getElementById('avatarInput').click()" style="margin-top: 10px; background: #1677ff; color: white; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-size: 13px;">📸 ছবি পরিবর্তন করুন</button>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(this)">
+            <button onclick="document.getElementById('avatarInput').click()" style="margin-top:10px;background:#1677ff;color:white;border:none;padding:6px 15px;border-radius:20px;cursor:pointer;font-size:13px;">📸 ছবি পরিবর্তন করুন</button>
         </div>
-        <!-- প্রোফাইল পিকচার সেকশন শেষ -->
-
         <h2>👤 My Profile</h2>
         <p>Name: <b id="profileName"></b></p>
         <p>Email: <b id="profileEmail"></b></p>
@@ -261,25 +165,17 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         <p>Referral Code: <b id="profileRefCode">—</b></p>
         <p>Followers: <b id="profileFollowers">0</b></p>
         <button onclick="showSellForm()">💰 Sell Coins</button>
+        <button onclick="openTransactionHistory()" style="background:#f39c12;color:white;border:0;margin-top:10px;padding:9px 16px;border-radius:5px;cursor:pointer;">📜 লেনদেনের ইতিহাস</button>
 
-<button onclick="openTransactionHistory()" style="background:#f39c12; color:white; border:0; margin-top:10px; padding:9px 16px; border-radius:5px; cursor:pointer;">📜 লেনদেনের ইতিহাস</button>
+        <div style="text-align:center;margin:20px 0;padding:15px;border:1px solid #ddd;border-radius:10px;background:#f9f9f9;">
+            <h4 style="margin-bottom:10px;">🪙 ফ্রি কয়েন জিতুন!</h4>
+            <p id="ad-status" style="font-size:14px;color:#555;margin-bottom:12px;">লোড হচ্ছে...</p>
+            <button id="watch-ad-btn" onclick="startAdWatch()" disabled style="background-color:#6c757d;color:white;border:none;padding:12px 24px;font-size:16px;border-radius:6px;cursor:pointer;font-weight:bold;">অপেক্ষা করুন...</button>
+        </div>
 
-      <div style="text-align: center; margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9;">
-    <h4 style="margin-bottom: 10px;">🪙 ফ্রি কয়েন জিতুন!</h4>
-    <p id="ad-status" style="font-size: 14px; color: #555; margin-bottom: 12px;">লোড হচ্ছে...</p>
-    <button id="watch-ad-btn" onclick="startAdWatch()" disabled style="background-color: #6c757d; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold;">
-        অপেক্ষা করুন...
-    </button>
-</div>
-
-         <button onclick="logoutUser()">Logout</button>
-
-      <button id="btnEnableNotifications" onclick="subscribeUserToPush()" style="background:#1677ff; color:white; border:0; margin-top:10px;">🔔 নোটিফিকেশন চালু করুন</button>
-    
-        
-<button id="btnAdminPanel" style="display:none; background:#28a745; color:white; border:0; margin-left: 10px;" onclick="openAdminPanel()">👑 Admin panel </button>
-        
-        
+        <button onclick="logoutUser()">Logout</button>
+        <button id="btnEnableNotifications" onclick="subscribeUserToPush()" style="background:#1677ff;color:white;border:0;margin-top:10px;">🔔 নোটিফিকেশন চালু করুন</button>
+        <button id="btnAdminPanel" style="display:none;background:#28a745;color:white;border:0;margin-left:10px;" onclick="openAdminPanel()">👑 Admin panel</button>
     </div>
 
     <div id="sellForm" style="display:none;margin-top:15px;">
@@ -301,50 +197,29 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     </div>
 </div>
 
-
-<!-- ================= ADMIN PANEL ================= -->
-<div id="adminPanel" style="display:none; background:white; padding:20px; border-bottom:1px solid #ddd; min-height:80vh; position:relative; z-index:999;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;background:white;padding:20px;border-bottom:1px solid #ddd;min-height:80vh;position:relative;z-index:999;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <h2>👑 অ্যাডমিন প্যানেল</h2>
-        <button onclick="closeAdminPanel()" style="background:#eee; border:0; padding:8px 15px; border-radius:5px; cursor:pointer;">← ফিরে যান</button>
+        <button onclick="closeAdminPanel()" style="background:#eee;border:0;padding:8px 15px;border-radius:5px;cursor:pointer;">← ফিরে যান</button>
     </div>
-
-
-
-
-<!-- Admin Panel-এ পণ্য যোগ করার ফর্ম -->
-<div style="background:#fff; padding:15px; border-radius:10px; margin-bottom:20px; border:1px solid #ddd;">
-    <h3>🛍️ নতুন পণ্য যোগ করুন</h3>
-    <input type="text" id="pName" placeholder="পণ্যের নাম" style="width:100%; padding:8px; margin:5px 0;">
-    <select id="pCategory" style="width:100%; padding:8px; margin:5px 0;">
-        <option value="পোশাক">পোশাক</option>
-        <option value="গাছ">নার্সারি (গাছ)</option>
-        <option value="কসমেটিকস">কসমেটিকস</option>
-    </select>
-    <input type="number" id="pPrice" placeholder="দাম (টাকা)" style="width:100%; padding:8px; margin:5px 0;">
-    <input type="file" id="pImage" accept="image/*" style="width:100%; padding:8px; margin:5px 0;">
-    <button onclick="addProduct()" style="background:#28a745; color:white; padding:10px; border:none; width:100%; border-radius:5px; margin-top:10px;">পণ্য যোগ করুন</button>
-</div>
-
-
-
-
-<!-- অর্ডার দেখার সেকশন -->
-<div style="background:#fff; padding:15px; border-radius:10px; margin-bottom:20px; border:1px solid #ddd;">
-    <h3>📦 নতুন অর্ডারসমূহ</h3>
-    <div id="adminOrdersList" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-        <p>লোড হচ্ছে...</p>
+    <div style="background:#fff;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ddd;">
+        <h3>🛍️ নতুন পণ্য যোগ করুন</h3>
+        <input type="text" id="pName" placeholder="পণ্যের নাম" style="width:100%;padding:8px;margin:5px 0;">
+        <select id="pCategory" style="width:100%;padding:8px;margin:5px 0;">
+            <option value="পোশাক">পোশাক</option>
+            <option value="গাছ">নার্সারি (গাছ)</option>
+            <option value="কসমেটিকস">কসমেটিকস</option>
+        </select>
+        <input type="number" id="pPrice" placeholder="দাম (টাকা)" style="width:100%;padding:8px;margin:5px 0;">
+        <input type="file" id="pImage" accept="image/*" style="width:100%;padding:8px;margin:5px 0;">
+        <button onclick="addProduct()" style="background:#28a745;color:white;padding:10px;border:none;width:100%;border-radius:5px;margin-top:10px;">পণ্য যোগ করুন</button>
     </div>
-</div>
-
-
-
-
-
-  
-    <div id="adminRequestsList" style="display:flex; flex-direction:column; gap:10px;">
-        Loading...
+    <div style="background:#fff;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ddd;">
+        <h3>📦 নতুন অর্ডারসমূহ</h3>
+        <div id="adminOrdersList" style="display:flex;flex-direction:column;gap:10px;margin-top:10px;"><p>লোড হচ্ছে...</p></div>
     </div>
+    <div id="adminRequestsList" style="display:flex;flex-direction:column;gap:10px;">Loading...</div>
 </div>
 
 <div class="layout">
@@ -353,9 +228,7 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
         <button onclick="showPopular()">🔥 জনপ্রিয়</button>
         <button>🆕 নতুন</button>
         <button>📷 ছবি</button>
-
-<button onclick="openShop()">🛍️ শপ</button>
-      
+        <button onclick="openShop()">🛍️ শপ</button>
         <button>🎥 ভিডিও</button>
         <button>🌳 প্রকৃতি</button>
         <button>📰 তথ্য</button>
@@ -390,28 +263,15 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
             <button onclick="filterCategory('তথ্য',this)">তথ্য</button>
         </div>
 
-
-
-
-<!-- Shop Section -->
-<div id="shopSection" style="display:none; background:#f5f5f5; padding:10px; min-height:100vh;">
-    
-    <!-- ক্যাটাগরি স্ক্রল বার -->
-    <div style="display:flex; overflow-x:auto; gap:10px; padding-bottom:10px; margin-bottom:15px; scrollbar-width:none;">
-        <button onclick="filterShop('All')" class="cat-btn active" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">সব</button>
-        <button onclick="filterShop('পোশাক')" class="cat-btn" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">পোশাক</button>
-        <button onclick="filterShop('গাছ')" class="cat-btn" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">নার্সারি</button>
-        <button onclick="filterShop('কসমেটিকস')" class="cat-btn" style="padding:8px 15px; border-radius:20px; border:1px solid #ddd; background:white; white-space:nowrap;">কসমেটিকস</button>
-    </div>
-
-    <!-- প্রোডাক্ট গ্রিড -->
-    <div id="productGrid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;">
-        <!-- জাভাস্ক্রিপ্ট দিয়ে কার্ড তৈরি হবে -->
-    </div>
-</div>
-
-
-      
+        <div id="shopSection" style="display:none;background:#f5f5f5;padding:10px;min-height:100vh;">
+            <div style="display:flex;overflow-x:auto;gap:10px;padding-bottom:10px;margin-bottom:15px;scrollbar-width:none;">
+                <button onclick="filterShop('All',this)" class="cat-btn" style="padding:8px 15px;border-radius:20px;border:1px solid #ddd;background:#ff5722;color:white;white-space:nowrap;">সব</button>
+                <button onclick="filterShop('পোশাক',this)" class="cat-btn" style="padding:8px 15px;border-radius:20px;border:1px solid #ddd;background:white;white-space:nowrap;">পোশাক</button>
+                <button onclick="filterShop('গাছ',this)" class="cat-btn" style="padding:8px 15px;border-radius:20px;border:1px solid #ddd;background:white;white-space:nowrap;">নার্সারি</button>
+                <button onclick="filterShop('কসমেটিকস',this)" class="cat-btn" style="padding:8px 15px;border-radius:20px;border:1px solid #ddd;background:white;white-space:nowrap;">কসমেটিকস</button>
+            </div>
+            <div id="productGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;"></div>
+        </div>
 
         <div class="feed" id="feed"></div>
     </main>
@@ -422,128 +282,95 @@ header{height:60px;background:white;border-bottom:1px solid #ddd;display:flex;al
     <button onclick="showPopular()">🔥<br>Popular</button>
     <button onclick="showUploadForm()">➕<br>Upload</button>
     <button>📷<br>Photo</button>
-
-  <button onclick="openShop()">🛍️ শপ</button>
+    <button onclick="openShop()">🛍️<br>শপ</button>
     <button onclick="showProfile()">👤<br>Profile</button>
 </div>
 
-
-<!-- চ্যাট ইনবক্স এবং চ্যাট বক্সের HTML -->
 <div id="chatOverlay" class="chat-overlay">
     <div class="chat-container">
-        <!-- চ্যাট হেডার -->
         <div class="chat-header">
             <button id="chatBackBtn" style="display:none;" onclick="showInbox()">←</button>
             <span id="chatHeaderName">Messages</span>
             <button style="margin-left:auto;" onclick="closeChatOverlay()">✕</button>
         </div>
-        
-        <!-- ইনবক্স লিস্ট (যাদের সাথে চ্যাট হয়েছে) -->
-        <div id="inboxView" class="inbox-list">
-            <p style="text-align:center; padding:20px; color:#777;">লোড হচ্ছে...</p>
-        </div>
-
-        <!-- আসল চ্যাট বক্স -->
-        <div id="chatRoomView" style="display:none; flex-direction:column; flex:1; overflow:hidden;">
+        <div id="inboxView" class="inbox-list"><p style="text-align:center;padding:20px;color:#777;">লোড হচ্ছে...</p></div>
+        <div id="chatRoomView" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
             <div id="chatMessages" class="chat-body"></div>
             <div class="chat-footer">
-    <button onclick="openTransferModal()" style="background:#ffd700; color:#333; padding:10px 15px; border-radius:50%; font-size:16px; border: none; cursor: pointer;" title="কয়েন পাঠান">🪙</button>
-    <input id="chatInput" type="text" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key === 'Enter') sendMessage()">
-    <button onclick="sendMessage()">Send</button>
-</div>
+                <button onclick="openTransferModal()" style="background:#ffd700;color:#333;padding:10px 15px;border-radius:50%;font-size:16px;border:none;cursor:pointer;" title="কয়েন পাঠান">🪙</button>
+                <input id="chatInput" type="text" placeholder="মেসেজ লিখুন..." onkeypress="if(event.key==='Enter')sendMessage()">
+                <button onclick="sendMessage()">Send</button>
+            </div>
         </div>
     </div>
 </div>
 
-
-<!-- Transaction History Modal -->
-<div id="historyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-    <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:400px; max-height:80vh; display:flex; flex-direction:column; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+<div id="historyModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:10000;justify-content:center;align-items:center;">
+    <div style="background:white;padding:20px;border-radius:10px;width:90%;max-width:400px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 4px 15px rgba(0,0,0,.2);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;border-bottom:1px solid #ddd;padding-bottom:10px;">
             <h3 style="margin:0;">📜 লেনদেনের ইতিহাস</h3>
-            <button onclick="document.getElementById('historyModal').style.display='none'" style="background:none; border:none; font-size:22px; cursor:pointer;">✕</button>
+            <button onclick="document.getElementById('historyModal').style.display='none'" style="background:none;border:none;font-size:22px;cursor:pointer;">✕</button>
         </div>
-        <div id="historyList" style="overflow-y:auto; flex:1;">
-            <p style="text-align:center; color:#777;">লোড হচ্ছে...</p>
-        </div>
+        <div id="historyList" style="overflow-y:auto;flex:1;"><p style="text-align:center;color:#777;">লোড হচ্ছে...</p></div>
     </div>
 </div>
 
-
-<!-- Coin Transfer Modal -->
-<div id="transferModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-    <div style="background:white; padding:20px; border-radius:10px; width:80%; max-width:320px; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+<div id="transferModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:10000;justify-content:center;align-items:center;">
+    <div style="background:white;padding:20px;border-radius:10px;width:80%;max-width:320px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.2);">
         <h3 style="margin-bottom:15px;">🪙 কয়েন পাঠান</h3>
-        <p id="transferReceiverName" style="margin-bottom:15px; font-weight:bold; color:#1677ff;"></p>
-        <input type="number" id="transferAmount" placeholder="কয়েনের পরিমাণ" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:5px; outline:none;">
-        <div style="display:flex; gap:10px;">
-            <button onclick="closeTransferModal()" style="flex:1; padding:10px; background:#ddd; border:none; border-radius:5px; cursor:pointer;">বাতিল</button>
-            <button onclick="executeCoinTransfer()" style="flex:1; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">পাঠান</button>
+        <p id="transferReceiverName" style="margin-bottom:15px;font-weight:bold;color:#1677ff;"></p>
+        <input type="number" id="transferAmount" placeholder="কয়েনের পরিমাণ" style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:5px;outline:none;">
+        <div style="display:flex;gap:10px;">
+            <button onclick="closeTransferModal()" style="flex:1;padding:10px;background:#ddd;border:none;border-radius:5px;cursor:pointer;">বাতিল</button>
+            <button onclick="executeCoinTransfer()" style="flex:1;padding:10px;background:#28a745;color:white;border:none;border-radius:5px;cursor:pointer;">পাঠান</button>
         </div>
     </div>
 </div>
 
-
-
-
-
-  <!-- Order Modal (অর্ডার ফর্ম) -->
-<div id="orderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-    <div style="background:white; padding:20px; border-radius:10px; width:90%; max-width:400px;">
+<div id="orderModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:10000;justify-content:center;align-items:center;">
+    <div style="background:white;padding:20px;border-radius:10px;width:90%;max-width:400px;">
         <h3 id="orderProductName" style="margin-bottom:10px;">পণ্যের নাম</h3>
-        <p style="color:#ff007f; font-weight:bold; margin-bottom:15px;">দাম: <span id="orderProductPrice">0</span> ৳</p>
-        
-        <input type="text" id="buyerName" placeholder="আপনার নাম" value="" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px;">
-        <input type="tel" id="buyerPhone" placeholder="মোবাইল নম্বর" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px;">
-        <textarea id="buyerAddress" placeholder="সম্পূর্ণ ঠিকানা (গ্রাম/শহর, থানা, জেলা)" rows="3" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
-        
-        <div style="display:flex; gap:10px;">
-            <button onclick="document.getElementById('orderModal').style.display='none'" style="flex:1; padding:10px; background:#ddd; border:none; border-radius:5px;">বাতিল</button>
-            <button onclick="submitOrder()" style="flex:1; padding:10px; background:#28a745; color:white; border:none; border-radius:5px;">অর্ডার কনফার্ম করুন</button>
+        <p style="color:#ff007f;font-weight:bold;margin-bottom:15px;">দাম: <span id="orderProductPrice">0</span> ৳</p>
+        <input type="text" id="buyerName" placeholder="আপনার নাম" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;">
+        <input type="tel" id="buyerPhone" placeholder="মোবাইল নম্বর" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;">
+        <textarea id="buyerAddress" placeholder="সম্পূর্ণ ঠিকানা (গ্রাম/শহর, থানা, জেলা)" rows="3" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccc;border-radius:5px;"></textarea>
+        <div style="display:flex;gap:10px;">
+            <button onclick="document.getElementById('orderModal').style.display='none'" style="flex:1;padding:10px;background:#ddd;border:none;border-radius:5px;">বাতিল</button>
+            <button onclick="submitOrder()" style="flex:1;padding:10px;background:#28a745;color:white;border:none;border-radius:5px;">অর্ডার কনফার্ম করুন</button>
         </div>
     </div>
 </div>
-
-
-
-  
-
-
-
-
-  
-  
 
 <script>
-let sb = null, currentUser = null, currentProfile = null;
-let isLoadingPosts = false;
+let sb = null, currentUser = null, currentProfile = null, isLoadingPosts = false, reloadPending = false;
 
-// Supabase ক্লায়েন্ট তৈরি (সরাসরি)
+function escapeHTML(t){ const d = document.createElement("div"); d.textContent = t == null ? "" : t; return d.innerHTML; }
+function escapeAttr(t){
+    return String(t == null ? "" : t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+const DEFAULT_AVATAR = "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#ddd"/><circle cx="50" cy="38" r="18" fill="#999"/><ellipse cx="50" cy="85" rx="30" ry="22" fill="#999"/></svg>'
+);
+document.getElementById("profileAvatarImg").src = DEFAULT_AVATAR;
+
 if (typeof window.supabase === "undefined") {
-    document.getElementById("loadError").style.display = "block";
-    document.getElementById("loadError").innerText = "⚠️ Supabase লোড হয়নি। ইন্টারনেট বা VPN পরিবর্তন করে রিফ্রেশ দিন।";
+    const e = document.getElementById("loadError");
+    e.style.display = "block";
+    e.innerText = "⚠️ Supabase লোড হয়নি। ইন্টারনেট বা VPN পরিবর্তন করে রিফ্রেশ দিন।";
 } else {
-    const SUPABASE_URL = "https://klfkhciripeisvbonvgi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsZmtoY2lyaXBlaXN2Ym9udmdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MDExNTUsImV4cCI6MjEwNzM3NzE1NX0.eREJbBhM6M5LCm3mZ7-PtAP4yI6nFZSQFPzdp9xXpKQ";
-
     try {
-        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        sb = window.supabase.createClient(
+            "https://klfkhciripeisvbonvgi.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsZmtoY2lyaXBlaXN2Ym9udmdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MDExNTUsImV4cCI6MjEwNzM3NzE1NX0.eREJbBhM6M5LCm3mZ7-PtAP4yI6nFZSQFPzdp9xXpKQ"
+        );
     } catch (e) {
-        document.getElementById("loadError").style.display = "block";
-        document.getElementById("loadError").innerText = "⚠️ Init error: " + e.message;
+        const el = document.getElementById("loadError");
+        el.style.display = "block";
+        el.innerText = "⚠️ Init error: " + e.message;
     }
 }
 
-function escapeHTML(text){
-    const div = document.createElement("div");
-    div.textContent = text == null ? "" : text;
-    return div.innerHTML;
-}
-
-function setMsg(txt){ 
-    const el = document.getElementById("authMessage");
-    if (el) el.innerText = txt;
-}
+function setMsg(t){ const el = document.getElementById("authMessage"); if (el) el.innerText = t; }
 
 window.showCoinToast = function(message){
     const toast = document.createElement("div");
@@ -554,9 +381,9 @@ window.showCoinToast = function(message){
     setTimeout(() => toast.remove(), 3000);
 };
 
-// এখন sb তৈরি হয়েছে, তাই sb.auth কল করা নিরাপদ
+// লগইন/লগআউট/পেজ লোড: এখান থেকেই একবার loadPosts() চলে
 if (sb) {
-    sb.auth.onAuthStateChange(async (event, session) => {
+    async function handleAuth(session){
         currentUser = session?.user || null;
         if (currentUser) {
             await loadProfile();
@@ -564,23 +391,20 @@ if (sb) {
                 showUserProfile();
                 renderProfile();
                 await updateHeaderCoinCount();
-                checkAdminStatus(); 
+                checkAdminStatus();
+                checkAdAvailability();
                 await loadPosts();
-
                 const params = new URLSearchParams(window.location.search);
-                const chatWithId = params.get('chat_with');
-                const chatWithName = params.get('name');
-
+                const chatWithId = params.get('chat_with'), chatWithName = params.get('name');
                 if (chatWithId && chatWithName) {
                     window.history.replaceState({}, document.title, "/");
                     openChatOverlay();
-                    setTimeout(() => {
-                        openChatRoom(chatWithId, chatWithName);
-                    }, 800);
+                    setTimeout(() => openChatRoom(chatWithId, chatWithName), 800);
                 }
             } else {
                 showAuthBox();
                 setMsg("আপনার Email Verify করুন। Inbox/Spam চেক করুন।");
+                await loadPosts();
             }
         } else {
             currentProfile = null;
@@ -588,9 +412,11 @@ if (sb) {
             document.getElementById("headerCoins").innerText = "0";
             await loadPosts();
         }
-    });
+    }
+    // কলব্যাকের ভেতরে await করলে Supabase আটকে যায়, তাই setTimeout দিয়ে বাইরে চালানো হয়
+    sb.auth.onAuthStateChange((event, session) => { setTimeout(() => handleAuth(session), 0); });
+    loadPosts();
 }
-
 
 function showAuthBox(){
     document.getElementById("authBox").style.display = "block";
@@ -617,24 +443,17 @@ window.registerUser = async function(){
         const email = document.getElementById("regEmail").value.trim();
         const password = document.getElementById("regPassword").value;
         const refCode = (document.getElementById("regReferral")?.value || "").trim().toUpperCase();
-
         if (!name) { setMsg("❌ আপনার নাম লিখুন।"); return; }
         if (!email) { setMsg("❌ Email লিখুন।"); return; }
         if (password.length < 6) { setMsg("❌ Password কমপক্ষে ৬ অক্ষর।"); return; }
-
         let referrerId = null;
         if (refCode) {
             const { data: refProfile } = await sb.from("profiles").select("id").eq("referral_code", refCode).maybeSingle();
             if (!refProfile) { setMsg("❌ Referral Code সঠিক নয়।"); return; }
             referrerId = refProfile.id;
         }
-
-        const { data, error } = await sb.auth.signUp({
-            email, password,
-            options: { data: { name, referred_by: referrerId || "" } }
-        });
+        const { error } = await sb.auth.signUp({ email, password, options: { data: { name, referred_by: referrerId || "" } } });
         if (error) throw error;
-
         setMsg("✅ Verification email পাঠানো হয়েছে। Email verify করুন। Spam folder-ও দেখুন।");
     } catch (error) {
         console.error("REG ERROR:", error);
@@ -655,19 +474,11 @@ window.loginUser = async function(){
             return;
         }
         setMsg("✅ Login সফল হয়েছে");
-    } catch (error) {
-        setMsg("❌ " + (error.message || JSON.stringify(error)));
-    }
+    } catch (error) { setMsg("❌ " + (error.message || JSON.stringify(error))); }
 };
 
-window.logoutUser = async function(){
-    await sb.auth.signOut();
-    setMsg("Logout হয়েছে ✅");
-};
-
-window.openProfile = function(){
-    document.getElementById("profilePanel").style.display = "block";
-};
+window.logoutUser = async function(){ await sb.auth.signOut(); setMsg("Logout হয়েছে ✅"); };
+window.openProfile = function(){ document.getElementById("profilePanel").style.display = "block"; };
 
 window.showProfile = async function(){
     openProfile();
@@ -681,68 +492,51 @@ window.showProfile = async function(){
 
 function renderProfile(){
     if (!currentProfile) return;
-    document.getElementById("profileName").innerText = currentProfile.name || "";
-    document.getElementById("profileEmail").innerText = currentProfile.email || "";
-    document.getElementById("profileBalance").innerText = currentProfile.balance || 0;
-    document.getElementById("profileCoins").innerText = currentProfile.coins || 0;
-    document.getElementById("profileReferrals").innerText = currentProfile.referrals || 0;
-    document.getElementById("profileRefCode").innerText = currentProfile.referral_code || "—";
-    document.getElementById("profileFollowers").innerText = currentProfile.followers_count || 0;
-    
-    // ১. প্রোফাইল পেজের বড় ছবি
-    const avatarImg = document.getElementById("profileAvatarImg");
-    if (avatarImg) {
-        if(currentProfile.avatar_url) {
-            avatarImg.src = currentProfile.avatar_url;
-        } else {
-            avatarImg.src = "https://via.placeholder.com/100?text=👤";
-        }
-    }
-
-    // ২. হেডারের ছোট ছবি
-    const headerProfileIcon = document.getElementById("headerProfileIcon");
-    if (headerProfileIcon) {
-        if (currentProfile.avatar_url) {
-            headerProfileIcon.innerHTML = `<img src="${currentProfile.avatar_url}" class="header-avatar-img">`;
-        } else {
-            headerProfileIcon.innerHTML = `👤`;
-        }
-    }
+    const set = (id, v) => document.getElementById(id).innerText = v;
+    set("profileName", currentProfile.name || "");
+    set("profileEmail", currentProfile.email || "");
+    set("profileBalance", currentProfile.balance || 0);
+    set("profileCoins", currentProfile.coins || 0);
+    set("profileReferrals", currentProfile.referrals || 0);
+    set("profileRefCode", currentProfile.referral_code || "—");
+    set("profileFollowers", currentProfile.followers_count || 0);
+    document.getElementById("profileAvatarImg").src = currentProfile.avatar_url || DEFAULT_AVATAR;
+    const icon = document.getElementById("headerProfileIcon");
+    if (currentProfile.avatar_url) {
+        icon.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = currentProfile.avatar_url;
+        img.className = "header-avatar-img";
+        icon.appendChild(img);
+    } else icon.innerText = "👤";
 }
-window.uploadAvatar = async function(input) {
+
+window.uploadAvatar = async function(input){
     if (!currentUser) { alert("আগে Login করুন।"); return; }
     const file = input.files[0];
     if (!file) return;
-
     try {
         const ext = file.name.split(".").pop();
         const path = currentUser.id + "/avatar_" + Date.now() + "." + ext;
         const { error: upErr } = await sb.storage.from("avatars").upload(path, file);
         if (upErr) throw upErr;
-        
         const { data: urlData } = sb.storage.from("avatars").getPublicUrl(path);
         const avatarUrl = urlData.publicUrl;
-
         const { error: dbErr } = await sb.from("profiles").update({ avatar_url: avatarUrl }).eq("id", currentUser.id);
         if (dbErr) throw dbErr;
-
-        document.getElementById("profileAvatarImg").src = avatarUrl;
         currentProfile.avatar_url = avatarUrl;
-        
+        renderProfile();
         alert("✅ প্রোফাইল ছবি সফলভাবে আপডেট হয়েছে!");
-    } catch (err) {
-        console.error(err);
-        alert("❌ ছবি আপলোড করা যায়নি: " + err.message);
-    }
+    } catch (err) { console.error(err); alert("❌ ছবি আপলোড করা যায়নি: " + err.message); }
 };
 
 window.updateHeaderCoinCount = async function(){
-    const headerCoins = document.getElementById("headerCoins");
-    if (!currentUser) { headerCoins.innerText = "0"; return; }
+    const h = document.getElementById("headerCoins");
+    if (!currentUser) { h.innerText = "0"; return; }
     try {
         const { data } = await sb.from("profiles").select("coins").eq("id", currentUser.id).single();
-        if (data) headerCoins.innerText = data.coins || 0;
-    } catch(e){ console.error(e); }
+        if (data) h.innerText = data.coins || 0;
+    } catch (e) { console.error(e); }
 };
 
 window.showSellForm = function(){ document.getElementById("sellForm").style.display = "block"; };
@@ -759,8 +553,7 @@ window.requestSale = async function(){
     if (account.length < 5) { alert("Account number সঠিক নয়"); return; }
     try {
         const { data, error } = await sb.rpc("request_coin_sale", {
-            p_coins: coins, p_payment_method: method,
-            p_account_number: account, p_account_holder_name: holder || null
+            p_coins: coins, p_payment_method: method, p_account_number: account, p_account_holder_name: holder || null
         });
         if (error) throw error;
         alert("✅ Sell request পাঠানো হয়েছে\nID: " + data);
@@ -776,17 +569,11 @@ window.createPost = async function(){
     const file = document.getElementById("postImage").files[0];
     const msg = document.getElementById("postMessage");
     const submitBtn = document.querySelector('.upload-box button:not(.upload-close)');
-
     if (!currentUser) { msg.innerText = "আগে Login করুন।"; return; }
     if (!currentUser.email_confirmed_at) { msg.innerText = "আগে Email Verify করুন।"; return; }
     if (!title || !description || !category) { msg.innerText = "সব ঘর পূরণ করুন।"; return; }
-    
-    if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerText = "অপেক্ষা করুন...";
-    }
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = "অপেক্ষা করুন..."; }
     msg.innerText = "Publishing...";
-
     try {
         let imageUrl = null;
         if (file) {
@@ -794,149 +581,126 @@ window.createPost = async function(){
             const path = currentUser.id + "/" + Date.now() + "." + ext;
             const { error: upErr } = await sb.storage.from("posts").upload(path, file);
             if (upErr) throw upErr;
-            const { data: urlData } = sb.storage.from("posts").getPublicUrl(path);
-            imageUrl = urlData.publicUrl;
+            imageUrl = sb.storage.from("posts").getPublicUrl(path).data.publicUrl;
         }
         const { error } = await sb.from("posts").insert({
-            user_id: currentUser.id,
-            user_name: currentProfile?.name || "ব্যবহারকারী",
+            user_id: currentUser.id, user_name: currentProfile?.name || "ব্যবহারকারী",
             title, description, category, image_url: imageUrl
         });
         if (error) throw error;
         msg.innerText = "✅ সফলভাবে প্রকাশ হয়েছে";
-        
         document.getElementById("postTitle").value = "";
         document.getElementById("postDescription").value = "";
         document.getElementById("postImage").value = "";
-        
         setTimeout(() => hideUploadForm(), 1200);
         await loadPosts();
-    } catch (err) { 
-        msg.innerText = "❌ " + err.message; 
-    } finally {
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "প্রকাশ করুন";
-        }
-    }
+    } catch (err) { msg.innerText = "❌ " + err.message; }
+    finally { if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "প্রকাশ করুন"; } }
 };
 
 window.showUploadForm = function(){
     const box = document.querySelector(".upload-box");
     box.classList.add("show");
-    box.scrollIntoView({behavior:"smooth", block:"start"});
+    box.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 window.hideUploadForm = function(){
-    const box = document.querySelector(".upload-box");
-    box.classList.remove("show");
-    document.getElementById("postTitle").value = "";
-    document.getElementById("postDescription").value = "";
-    document.getElementById("postCategory").value = "";
-    document.getElementById("postImage").value = "";
+    document.querySelector(".upload-box").classList.remove("show");
+    ["postTitle","postDescription","postCategory","postImage"].forEach(id => document.getElementById(id).value = "");
     document.getElementById("postMessage").innerText = "";
 };
 
-
 async function loadPosts(){
-    if (isLoadingPosts) return;
+    if (!sb) return;
+    if (isLoadingPosts) { reloadPending = true; return; }
     isLoadingPosts = true;
-    
     const feed = document.getElementById("feed");
-    feed.innerHTML = '<p style="padding:20px; text-align:center;">ডাটাবেসে কানেক্ট হচ্ছে...</p>';
-
     try {
         const { data: posts, error } = await sb.from("posts").select("*").order("created_at", { ascending: false }).limit(50);
-        
         if (error) {
-            alert("❌ ডাটাবেস এরর: " + error.message);
-            feed.innerHTML = '<p style="padding:20px; color:red;">এরর: ' + error.message + '</p>';
+            console.error("posts error:", error);
+            feed.innerHTML = '<p style="padding:20px;color:red;">পোস্ট লোড করা যায়নি।</p>';
             return;
         }
-
         if (!posts || !posts.length) {
-            feed.innerHTML = '<p style="padding:20px; color:orange;">কোনো পোস্ট পাওয়া যায়নি।</p>';
+            feed.innerHTML = '<p style="padding:20px;color:orange;">কোনো পোস্ট পাওয়া যায়নি।</p>';
             return;
         }
-
-        // টেস্ট করার জন্য alert
-        alert("✅ সফল! " + posts.length + " টি পোস্ট পাওয়া গেছে।");
-
-        feed.innerHTML = ""; // আগের লোডিং টেক্সট মুছে ফেলা
-
-        posts.forEach(post => {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = `
-                <div class="post">
-                    <div class="title">${post.title || "শিরোনাম নেই"}</div>
-                    <div class="description">${post.description || "বিস্তারিত নেই"}</div>
-                </div>
-            `;
-            feed.appendChild(card);
+        const postIds = posts.map(p => p.id);
+        const userIds = [...new Set(posts.map(p => p.user_id))];
+        const [likesRes, commentsRes, profilesRes] = await Promise.all([
+            sb.from("likes").select("post_id, user_id").in("post_id", postIds),
+            sb.from("comments").select("post_id").in("post_id", postIds),
+            sb.from("profiles").select("id, avatar_url").in("id", userIds)
+        ]);
+        const likeCountMap = {}, userLikedMap = {}, commentCountMap = {}, avatarMap = {};
+        (likesRes.data || []).forEach(l => {
+            likeCountMap[l.post_id] = (likeCountMap[l.post_id] || 0) + 1;
+            if (currentUser && l.user_id === currentUser.id) userLikedMap[l.post_id] = true;
         });
-
-    } catch (err) { 
-        alert("❌ জাভাস্ক্রিপ্ট এরর: " + err.message);
-    } finally {
-        isLoadingPosts = false;
-    }
+        (commentsRes.data || []).forEach(c => commentCountMap[c.post_id] = (commentCountMap[c.post_id] || 0) + 1);
+        (profilesRes.data || []).forEach(p => avatarMap[p.id] = p.avatar_url);
+        const cards = posts.map(post => renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap));
+        feed.innerHTML = "";
+        cards.forEach(c => feed.appendChild(c));
+    } catch (err) {
+        console.error("LOAD POSTS:", err);
+        feed.innerHTML = '<p style="padding:20px;color:red;">কিছু একটা সমস্যা হয়েছে।</p>';
+    } finally { isLoadingPosts = false; if (reloadPending) { reloadPending = false; loadPosts(); } }
 }
 
-
-    
-async function renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap){
+function renderPost(post, likeCountMap, userLikedMap, commentCountMap, avatarMap){
     const card = document.createElement("div");
     card.className = "card firebase-post";
     card.dataset.postId = post.id;
     card.dataset.category = post.category || "";
     card.dataset.title = post.title || "";
     const isOwner = currentUser && post.user_id === currentUser.id;
-    
     const likeCount = likeCountMap[post.id] || 0;
     const userLiked = userLikedMap[post.id] || false;
     const commentCount = commentCountMap[post.id] || 0;
-    const authorAvatar = avatarMap[post.user_id] || "https://via.placeholder.com/40?text=👤";
-
-    let imageUrlOptimized = "";
-    if(post.image_url) {
-        imageUrlOptimized = post.image_url.includes('?') ? post.image_url + '&width=500' : post.image_url + '?width=500';
-    }
+    const authorAvatar = avatarMap[post.user_id] || DEFAULT_AVATAR;
+    let img = "";
+    if (post.image_url) img = post.image_url.includes('?') ? post.image_url + '&width=500' : post.image_url + '?width=500';
 
     card.innerHTML = `
         <div class="user">
-            <img src="${authorAvatar}" class="avatar" style="object-fit: cover;">
+            <img src="${escapeAttr(authorAvatar)}" class="avatar">
             <div class="user-info">
                 <div class="username">${escapeHTML(post.user_name || "ব্যবহারকারী")}</div>
                 <small>${new Date(post.created_at).toLocaleString("bn-BD")}</small>
             </div>
-            ${!isOwner ? `
-    <button class="follow" data-user-id="${post.user_id || ''}" onclick="followUser(this)">Follow</button>
-    <button onclick="openChatOverlay(); setTimeout(() => openChatRoom('${post.user_id}', '${escapeHTML(post.user_name)}'), 500);" style="background:#eee; border:1px solid #ccc; padding:6px 10px; border-radius:18px; cursor:pointer; font-size:13px; margin-left:5px;">💬 Message</button>
-` : ""}
-${isOwner ? `<button class="edit-post" onclick="editPost('${post.id}')">✏️</button>` : ""}
-            ${isOwner ? `<button class="delete-post" onclick="deletePost('${post.id}')">🗑</button>` : ""}
+            ${!isOwner ? `<button class="follow" data-user-id="${escapeAttr(post.user_id || '')}" onclick="followUser(this)">Follow</button>
+            <button class="msg-btn" data-uid="${escapeAttr(post.user_id)}" data-name="${escapeAttr(post.user_name)}">💬 Message</button>` : ""}
+            ${isOwner ? `<button class="edit-post" onclick="editPost('${escapeAttr(post.id)}')">✏️</button><button class="delete-post" onclick="deletePost('${escapeAttr(post.id)}')">🗑</button>` : ""}
         </div>
         <div class="post">
             <div class="title">${escapeHTML(post.title || "")}</div>
             <div class="description">${escapeHTML(post.description || "")}</div>
-            ${post.image_url ? `<img src="${imageUrlOptimized}" loading="lazy" class="post-image" onclick="addView('${post.id}')">` : ""}
+            ${post.image_url ? `<img src="${escapeAttr(img)}" loading="lazy" class="post-image" onclick="addView('${escapeAttr(post.id)}')">` : ""}
             <div class="views">👁 <span class="viewCount">${post.views || 0}</span></div>
         </div>
         <div class="actions">
-            <button class="like ${userLiked ? 'liked' : ''}" onclick="likePost(this, '${post.id}')">👍 <span class="likeCount">${likeCount}</span></button>
-            <button onclick="toggleComments(this, '${post.id}')">💬 <span class="commentCount">${commentCount}</span></button>
-            <button onclick="sharePost('${post.id}')">↗ <span class="shareCount">${post.shares || 0}</span></button>
+            <button class="like ${userLiked ? 'liked' : ''}" onclick="likePost(this,'${escapeAttr(post.id)}')">👍 <span class="likeCount">${likeCount}</span></button>
+            <button onclick="toggleComments(this,'${escapeAttr(post.id)}')">💬 <span class="commentCount">${commentCount}</span></button>
+            <button onclick="sharePost('${escapeAttr(post.id)}')">↗ <span class="shareCount">${post.shares || 0}</span></button>
         </div>
         <div class="comment-box">
             <div>
                 <input class="comment-input" type="text" placeholder="মন্তব্য লিখুন...">
-                <button class="comment-send" onclick="addComment(this, '${post.id}')">Send</button>
+                <button class="comment-send" onclick="addComment(this,'${escapeAttr(post.id)}')">Send</button>
             </div>
             <div class="comments"><small>লোড হচ্ছে...</small></div>
-        </div>
-    `;
-    return card; 
+        </div>`;
+    return card;
 }
+
+document.addEventListener("click", e => {
+    const b = e.target.closest(".msg-btn");
+    if (!b) return;
+    openChatOverlay();
+    setTimeout(() => openChatRoom(b.dataset.uid, b.dataset.name), 500);
+});
+
 window.likePost = async function(button, postId){
     if (!currentUser) { alert("আগে Login করুন।"); return; }
     try {
@@ -957,19 +721,11 @@ window.likePost = async function(button, postId){
 async function toggleComments(button, postId){
     const card = button.closest(".card");
     const box = card.querySelector(".comment-box");
-    
-    // যদি কমেন্ট বক্স বন্ধ থাকে, তবে খুলবে এবং কমেন্ট লোড করবে
     if (box.style.display !== "block") {
         box.style.display = "block";
-        const commentsDiv = box.querySelector(".comments");
-        
-        // যদি আগে কমেন্ট লোড করা না থাকে, তবে ডাটাবেস থেকে লোড করা হবে
-        if (commentsDiv.innerHTML.includes("লোড হচ্ছে...") || commentsDiv.innerHTML.trim() === "") {
-            await loadComments(card, postId);
-        }
-    } else {
-        box.style.display = "none";
-    }
+        const cd = box.querySelector(".comments");
+        if (cd.innerHTML.includes("লোড হচ্ছে...") || cd.innerHTML.trim() === "") await loadComments(card, postId);
+    } else box.style.display = "none";
 }
 
 window.addComment = async function(button, postId){
@@ -978,101 +734,61 @@ window.addComment = async function(button, postId){
     const input = box.querySelector(".comment-input");
     const text = input.value.trim();
     if (!text) { alert("মন্তব্য লিখুন।"); return; }
-
     try {
-        // ১. ডাটাবেসে চেক করা হচ্ছে এই ইউজার আগে কমেন্ট করেছে কিনা
-        const { data: existingComment } = await sb.from("comments")
-            .select("id")
-            .eq("post_id", postId)
-            .eq("user_id", currentUser.id)
-            .limit(1);
-
-        // যদি আগে কমেন্ট করে থাকে, তবে আর সামনে এগোবে না
+        const { data: existingComment } = await sb.from("comments").select("id").eq("post_id", postId).eq("user_id", currentUser.id).limit(1);
         if (existingComment && existingComment.length > 0) {
             alert("❌ আপনি ইতিমধ্যে এই পোস্টে একটি মন্তব্য করেছেন। একাধিকবার মন্তব্য করা যাবে না।");
             return;
         }
-
-        // ২. নতুন কমেন্ট সেভ করা
         const { error } = await sb.from("comments").insert({
-            post_id: postId, user_id: currentUser.id,
-            user_name: currentProfile?.name || "ব্যবহারকারী", text: text
+            post_id: postId, user_id: currentUser.id, user_name: currentProfile?.name || "ব্যবহারকারী", text
         });
         if (error) throw error;
-        
         input.value = "";
         await loadComments(button.closest(".card"), postId);
         await updateHeaderCoinCount();
         showCoinToast("+2 🪙 Comment Reward");
-    } catch (err) { 
-        alert("মন্তব্য: " + err.message); 
-    }
+    } catch (err) { alert("মন্তব্য: " + err.message); }
 };
 
 async function loadComments(card, postId){
     const box = card.querySelector(".comments");
     const counter = card.querySelector(".commentCount");
     box.innerHTML = "Loading...";
-    
     try {
         const { data: comments, error } = await sb.from("comments").select("*").eq("post_id", postId).order("created_at", { ascending: true });
         if (error) throw error;
-        
         if (counter) counter.innerText = comments.length;
         box.innerHTML = "";
-        
-        if (!comments.length) { 
-            box.innerHTML = "<small>এখনো কোনো মন্তব্য নেই।</small>"; 
-            return; 
-        }
-
-        // ১. কমেন্টকারীদের ইউজার আইডি বের করা
+        if (!comments.length) { box.innerHTML = "<small>এখনো কোনো মন্তব্য নেই।</small>"; return; }
         const userIds = [...new Set(comments.map(c => c.user_id))];
-        
-        // ২. প্রোফাইল টেবিল থেকে সবার ছবি নিয়ে আসা
         const { data: profiles } = await sb.from("profiles").select("id, avatar_url").in("id", userIds);
-        
-        // ৩. ছবিগুলো যাতে সহজে খুঁজে পাওয়া যায়, সেই ম্যাপ তৈরি করা
         const avatarMap = {};
-        if (profiles) {
-            profiles.forEach(p => {
-                avatarMap[p.id] = p.avatar_url || "https://via.placeholder.com/30?text=👤";
-            });
-        }
-        
+        (profiles || []).forEach(p => avatarMap[p.id] = p.avatar_url || DEFAULT_AVATAR);
         comments.forEach(c => {
             const div = document.createElement("div");
             div.className = "comment";
-            
-            // ৪. ইউজারের ছবি সেট করা
-            const avatarUrl = avatarMap[c.user_id] || "https://via.placeholder.com/30?text=👤";
-            const avatarImg = `<img src="${avatarUrl}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; margin-right:6px; vertical-align:middle;">`;
-            
-            // ৫. ডিফল্ট 👤 এর জায়গায় আসল ছবি বসানো
-            div.innerHTML = `${avatarImg} <b>${escapeHTML(c.user_name || "ব্যবহারকারী")}:</b> ${escapeHTML(c.text || "")}`;
-            
+            const im = document.createElement("img");
+            im.src = avatarMap[c.user_id] || DEFAULT_AVATAR;
+            im.style.cssText = "width:26px;height:26px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;";
+            div.appendChild(im);
+            div.insertAdjacentHTML("beforeend", ` <b>${escapeHTML(c.user_name || "ব্যবহারকারী")}:</b> ${escapeHTML(c.text || "")}`);
             if (currentUser && c.user_id === currentUser.id) {
-                const del = document.createElement("button"); 
+                const del = document.createElement("button");
                 del.innerText = "🗑";
                 del.style.cssText = "margin-left:10px;border:0;background:transparent;cursor:pointer;";
                 del.onclick = () => deleteComment(postId, c.id);
                 div.appendChild(del);
             }
-            
             box.appendChild(div);
         });
-    } catch (err) { 
-        console.error("Comment load error:", err);
-        box.innerHTML = "Load করা যায়নি।"; 
-    }
+    } catch (err) { console.error("Comment load error:", err); box.innerHTML = "Load করা যায়নি।"; }
 }
 
 window.deleteComment = async function(postId, commentId){
     if (!confirm("মুছতে চান?")) return;
-    try {
-        await sb.from("comments").delete().eq("id", commentId);
-        await loadPosts();
-    } catch (err) { alert("মুছতে পারেনি: " + err.message); }
+    try { await sb.from("comments").delete().eq("id", commentId); await loadPosts(); }
+    catch (err) { alert("মুছতে পারেনি: " + err.message); }
 };
 
 window.followUser = async function(button){
@@ -1101,16 +817,13 @@ window.sharePost = async function(postId){
     try {
         if (navigator.share) await navigator.share({ title: "তথ্য সেবা", url });
         else { await navigator.clipboard.writeText(url); alert("লিংক কপি হয়েছে ✅"); }
-        const { data: p } = await sb.from("posts").select("shares").eq("id", postId).single();
-        await sb.from("posts").update({ shares: (p?.shares || 0) + 1 }).eq("id", postId);
+        await sb.rpc('increment_post_field', { p_id: postId, p_field: 'shares' });
     } catch (err) { console.log("Share:", err); }
 };
 
 window.addView = async function(postId){
-    try {
-        const { data: p } = await sb.from("posts").select("views").eq("id", postId).single();
-        await sb.from("posts").update({ views: (p?.views || 0) + 1 }).eq("id", postId);
-    } catch (err) { console.error(err); }
+    try { await sb.rpc('increment_post_field', { p_id: postId, p_field: 'views' }); }
+    catch (err) { console.error(err); }
 };
 
 window.editPost = async function(postId){
@@ -1140,9 +853,8 @@ window.deletePost = async function(postId){
 
 function searchPosts(){
     const q = document.getElementById("searchInput").value.toLowerCase().trim();
-    document.querySelectorAll(".card").forEach(card => {
-        const t = (card.dataset.title || "").toLowerCase();
-        const c = (card.dataset.category || "").toLowerCase();
+    document.querySelectorAll("#feed .card").forEach(card => {
+        const t = (card.dataset.title || "").toLowerCase(), c = (card.dataset.category || "").toLowerCase();
         card.style.display = (t.includes(q) || c.includes(q)) ? "" : "none";
     });
 }
@@ -1151,641 +863,400 @@ document.getElementById("searchInput").addEventListener("keyup", e => { if (e.ke
 function filterCategory(category, button){
     document.querySelectorAll(".categories button").forEach(b => b.classList.remove("active"));
     button.classList.add("active");
-    document.querySelectorAll(".card").forEach(card => {
-        if (category === "সব") { card.style.display = ""; return; }
-        card.style.display = (card.dataset.category || "").includes(category) ? "" : "none";
+    document.querySelectorAll("#feed .card").forEach(card => {
+        card.style.display = (category === "সব" || (card.dataset.category || "").includes(category)) ? "" : "none";
     });
 }
-function showAll(){ document.querySelectorAll(".card").forEach(c => c.style.display = ""); }
+
 function showPopular(){
     const feed = document.getElementById("feed");
-    const cards = [...feed.querySelectorAll(".card")];
-    cards.sort((a, b) => Number(b.querySelector(".viewCount")?.innerText || 0) - Number(a.querySelector(".viewCount")?.innerText || 0));
-    cards.forEach(c => feed.appendChild(c));
+    [...feed.querySelectorAll(".card")]
+        .sort((a, b) => Number(b.querySelector(".viewCount")?.innerText || 0) - Number(a.querySelector(".viewCount")?.innerText || 0))
+        .forEach(c => feed.appendChild(c));
 }
 
-(async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) await loadPosts();
-})();
+window.showAll = function(){
+    document.getElementById('shopSection').style.display = 'none';
+    document.getElementById('feed').style.display = 'grid';
+    document.querySelector('.categories').style.display = 'flex';
+    document.querySelectorAll("#feed .card").forEach(c => c.style.display = "");
+};
 
-
-// ================= ADMIN PANEL LOGIC =================
-
-async function checkAdminStatus() {
+// ================= ADMIN =================
+async function checkAdminStatus(){
     if (!currentUser) return;
     const { data, error } = await sb.rpc('check_is_admin');
     const btn = document.getElementById('btnAdminPanel');
-    if (!error && data === true) {
-        if(btn) btn.style.display = 'inline-block';
-    } else {
-        if(btn) btn.style.display = 'none';
-    }
+    if (btn) btn.style.display = (!error && data === true) ? 'inline-block' : 'none';
 }
 
-window.openAdminPanel = function() {
+window.openAdminPanel = function(){
     document.getElementById('profilePanel').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     loadAdminRequests();
+    loadAdminOrders();
 };
-
-window.closeAdminPanel = function() {
+window.closeAdminPanel = function(){
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('profilePanel').style.display = 'block';
 };
 
-async function loadAdminRequests() {
+async function loadAdminRequests(){
     const list = document.getElementById('adminRequestsList');
     list.innerHTML = 'লোড হচ্ছে...';
-    
     try {
-        const { data: requests, error } = await sb.from('coin_sell_requests')
-            .select('*')
-            .eq('status', 'pending')
-            .order('created_at', { ascending: true });
-
+        const { data: requests, error } = await sb.from('coin_sell_requests').select('*').eq('status', 'pending').order('created_at', { ascending: true });
         if (error) throw error;
-
-        if (!requests || requests.length === 0) {
-            list.innerHTML = '<p style="padding:20px; text-align:center; color:#777;">🎉 বর্তমানে কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
+        if (!requests || !requests.length) {
+            list.innerHTML = '<p style="padding:20px;text-align:center;color:#777;">🎉 বর্তমানে কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>';
             return;
         }
-
         const userIds = [...new Set(requests.map(r => r.user_id))];
         const { data: profiles } = await sb.from('profiles').select('id, name, email').in('id', userIds);
-        const profileMap = {};
-        if (profiles) profiles.forEach(p => profileMap[p.id] = p);
-
+        const pm = {};
+        (profiles || []).forEach(p => pm[p.id] = p);
         list.innerHTML = '';
         requests.forEach(req => {
-            const user = profileMap[req.user_id] || { name: 'Unknown', email: '' };
-            
+            const user = pm[req.user_id] || { name: 'Unknown', email: '' };
             const div = document.createElement('div');
-            div.style.cssText = 'border:1px solid #ddd; padding:15px; border-radius:8px; background:#f9f9f9; box-shadow:0 2px 5px rgba(0,0,0,0.05); margin-bottom: 10px;';
+            div.style.cssText = 'border:1px solid #ddd;padding:15px;border-radius:8px;background:#f9f9f9;box-shadow:0 2px 5px rgba(0,0,0,.05);margin-bottom:10px;';
             div.innerHTML = `
                 <p style="margin-bottom:5px;"><b>👤 ইউজার:</b> ${escapeHTML(user.name)} (${escapeHTML(user.email)})</p>
-                <p style="margin-bottom:5px;"><b>🪙 কয়েন:</b> ${req.coins_amount} | <b>💵 টাকা:</b> ${req.money_amount} ৳</p>
-                <p style="margin-bottom:5px;"><b>💳 মেথড:</b> ${req.payment_method.toUpperCase()}</p>
+                <p style="margin-bottom:5px;"><b>🪙 কয়েন:</b> ${escapeHTML(req.coins_amount)} | <b>💵 টাকা:</b> ${escapeHTML(req.money_amount)} ৳</p>
+                <p style="margin-bottom:5px;"><b>💳 মেথড:</b> ${escapeHTML(String(req.payment_method).toUpperCase())}</p>
                 <p style="margin-bottom:5px;"><b>📱 একাউন্ট:</b> ${escapeHTML(req.account_number)} (${escapeHTML(req.account_holder_name || 'N/A')})</p>
-                
-                <div style="margin-top:15px; display:flex; gap:10px;">
-                    <button onclick="approveAdminRequest('${req.id}')" style="flex:1; background:#28a745; color:white; border:0; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;">✅ Approve</button>
-                    <button onclick="rejectAdminRequest('${req.id}')" style="flex:1; background:#dc3545; color:white; border:0; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;">❌ Reject</button>
-                </div>
-            `;
+                <div style="margin-top:15px;display:flex;gap:10px;">
+                    <button onclick="approveAdminRequest('${escapeAttr(req.id)}')" style="flex:1;background:#28a745;color:white;border:0;padding:10px;border-radius:5px;cursor:pointer;font-weight:bold;">✅ Approve</button>
+                    <button onclick="rejectAdminRequest('${escapeAttr(req.id)}')" style="flex:1;background:#dc3545;color:white;border:0;padding:10px;border-radius:5px;cursor:pointer;font-weight:bold;">❌ Reject</button>
+                </div>`;
             list.appendChild(div);
         });
-    } catch (err) {
-        console.error(err);
-        list.innerHTML = 'Error: ' + err.message;
-    }
+    } catch (err) { console.error(err); list.innerHTML = 'Error: ' + escapeHTML(err.message); }
 }
 
-window.approveAdminRequest = async function(reqId) {
+window.approveAdminRequest = async function(reqId){
     const txnId = prompt("Transaction ID দিন (না থাকলে ফাঁকা রেখে OK দিন):");
-    if (txnId === null) return; 
-    
+    if (txnId === null) return;
     try {
-        const { error } = await sb.rpc('approve_coin_sale', {
-            p_request_id: reqId,
-            p_transaction_id: txnId || null
-        });
+        const { error } = await sb.rpc('approve_coin_sale', { p_request_id: reqId, p_transaction_id: txnId || null });
         if (error) throw error;
-        alert('✅ রিকোয়েস্ট অ্যাপ্রুভ হয়েছে! ইউজারের অ্যাকাউন্টে টাকা যোগ হয়েছে।');
+        alert('✅ রিকোয়েস্ট অ্যাপ্রুভ হয়েছে!');
         loadAdminRequests();
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
+    } catch (err) { alert('Error: ' + err.message); }
 };
 
+window.rejectAdminRequest = async function(reqId){
+    const note = prompt("রিজেক্ট করার কারণ লিখুন:");
+    if (note === null) return;
+    try {
+        const { error } = await sb.rpc('reject_coin_sale', { p_request_id: reqId, p_note: note || 'Admin rejected' });
+        if (error) throw error;
+        alert('❌ রিকোয়েস্ট রিজেক্ট করা হয়েছে এবং কয়েন ফেরত দেওয়া হয়েছে।');
+        loadAdminRequests();
+    } catch (err) { alert('Error: ' + err.message); }
+};
 
-
-window.addProduct = async function() {
-    const name = document.getElementById('pName').value;
+window.addProduct = async function(){
+    const name = document.getElementById('pName').value.trim();
     const category = document.getElementById('pCategory').value;
     const price = parseFloat(document.getElementById('pPrice').value);
     const file = document.getElementById('pImage').files[0];
-
     if (!name || !price || !file) { alert("সব ঘর পূরণ করুন এবং ছবি দিন।"); return; }
-
-    // ১. ছবি আপলোড করা
     const ext = file.name.split(".").pop();
     const path = "product_" + Date.now() + "." + ext;
-    const { error: upErr } = await sb.storage.from("posts").upload(path, file); // 'posts' বাকেটে আপলোড করছি
+    const { error: upErr } = await sb.storage.from("posts").upload(path, file);
     if (upErr) { alert("ছবি আপলোড হয়নি: " + upErr.message); return; }
-
     const { data: urlData } = sb.storage.from("posts").getPublicUrl(path);
-    
-    // ২. ডাটাবেসে সেভ করা
-    const { error } = await sb.from('products').insert({
-        name, category, price, image_url: urlData.publicUrl
-    });
-
+    const { error } = await sb.from('products').insert({ name, category, price, image_url: urlData.publicUrl });
     if (error) alert("পণ্য যোগ হয়নি: " + error.message);
     else alert("✅ পণ্য সফলভাবে যোগ হয়েছে!");
 };
 
-
-
-// অ্যাডমিন প্যানেলে অর্ডার দেখানোর ফাংশন
-window.loadAdminOrders = async function() {
+window.loadAdminOrders = async function(){
     const list = document.getElementById('adminOrdersList');
-    if(!list) return;
+    if (!list) return;
     list.innerHTML = 'লোড হচ্ছে...';
-
     const { data: orders, error } = await sb.from('orders').select('*, products(name)').order('created_at', { ascending: false });
-
     if (error) { list.innerHTML = 'অর্ডার লোড করা যায়নি।'; return; }
-
-    if (!orders || orders.length === 0) {
-        list.innerHTML = '<p>এখনো কোনো অর্ডার আসেনি।</p>';
-        return;
-    }
-
+    if (!orders || !orders.length) { list.innerHTML = '<p>এখনো কোনো অর্ডার আসেনি।</p>'; return; }
     list.innerHTML = '';
-    orders.forEach(order => {
+    orders.forEach(o => {
         const div = document.createElement('div');
-        div.style.cssText = 'border:1px solid #ddd; padding:10px; border-radius:5px; background:#f9f9f9; font-size:14px;';
+        div.style.cssText = 'border:1px solid #ddd;padding:10px;border-radius:5px;background:#f9f9f9;font-size:14px;';
         div.innerHTML = `
-            <p><b>👤 নাম:</b> ${escapeHTML(order.buyer_name)}</p>
-            <p><b>📞 ফোন:</b> ${escapeHTML(order.phone)}</p>
-            <p><b>📍 ঠিকানা:</b> ${escapeHTML(order.address)}</p>
-            <p><b>🛍️ পণ্য:</b> ${escapeHTML(order.products?.name || 'N/A')} (৳${order.total_price})</p>
-            <p><b>📌 স্ট্যাটাস:</b> <span style="color:red;">${order.status}</span></p>
-        `;
+            <p><b>👤 নাম:</b> ${escapeHTML(o.buyer_name)}</p>
+            <p><b>📞 ফোন:</b> ${escapeHTML(o.phone)}</p>
+            <p><b>📍 ঠিকানা:</b> ${escapeHTML(o.address)}</p>
+            <p><b>🛍️ পণ্য:</b> ${escapeHTML(o.products?.name || 'N/A')} (৳${escapeHTML(o.total_price)})</p>
+            <p><b>📌 স্ট্যাটাস:</b> <span style="color:red;">${escapeHTML(o.status)}</span></p>`;
         list.appendChild(div);
     });
 };
 
-// অ্যাডমিন প্যানেল ওপেন করলে পণ্যের পাশাপাশি অর্ডারও লোড হবে
-const originalOpenAdminPanel = window.openAdminPanel;
-window.openAdminPanel = function() {
-    originalOpenAdminPanel();
-    loadAdminOrders(); // নতুন ফাংশনটি কল করা হলো
-};
+// ================= CHAT =================
+let currentChatUserId = null, currentChatUserName = null, messageSubscription = null;
 
-
-
-
-
-  
-  
-window.rejectAdminRequest = async function(reqId) {
-    const note = prompt("রিজেক্ট করার কারণ লিখুন:");
-    if (note === null) return; 
-    
-    try {
-        const { error } = await sb.rpc('reject_coin_sale', {
-            p_request_id: reqId,
-            p_note: note || 'Admin rejected'
-        });
-        if (error) throw error;
-        alert('❌ রিকোয়েস্ট রিজেক্ট করা হয়েছে এবং ইউজারের কয়েন ফেরত দেওয়া হয়েছে।');
-        loadAdminRequests();
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
-};
-
-
-
-
-  // ================= CHAT SYSTEM LOGIC =================
-let currentChatUserId = null;
-let currentChatUserName = null;
-let messageSubscription = null; // রিয়েল-টাইম আপডেটের জন্য
-
-window.openChatOverlay = function() {
+window.openChatOverlay = function(){
     if (!currentUser) { alert("মেসেজ দেখতে আগে লগইন করুন।"); return; }
     document.getElementById('chatOverlay').style.display = 'flex';
     showInbox();
 };
-
-window.closeChatOverlay = function() {
+window.closeChatOverlay = function(){
     document.getElementById('chatOverlay').style.display = 'none';
     if (messageSubscription) { sb.removeChannel(messageSubscription); messageSubscription = null; }
 };
 
-// ইনবক্স লোড করা (কে কে মেসেজ করেছে)
-window.showInbox = async function() {
+window.showInbox = async function(){
     document.getElementById('inboxView').style.display = 'block';
     document.getElementById('chatRoomView').style.display = 'none';
     document.getElementById('chatBackBtn').style.display = 'none';
     document.getElementById('chatHeaderName').innerText = "Messages";
-    
     const inboxList = document.getElementById('inboxView');
-    inboxList.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">লোড হচ্ছে...</p>';
-
-    // আমার পাঠানো বা আমার কাছে আসা সব মেসেজ আনা
-    const { data: msgs, error } = await sb.from("messages")
-        .select("*")
-        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
-        .order("created_at", { ascending: false });
-
-    if (error) { inboxList.innerHTML = "লোড হয়নি।"; return; }
-
-    // ইউনিক ইউজারদের আইডি বের করা
-    const chattedUserIds = new Set();
+    inboxList.innerHTML = '<p style="text-align:center;padding:20px;color:#777;">লোড হচ্ছে...</p>';
+    const { data: msgs, error } = await sb.from("messages").select("*")
+        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at", { ascending: false });
+    if (error) { inboxList.innerHTML = "লোড হয়নি।"; return; }
+    const ids = new Set();
     msgs.forEach(m => {
-        if (m.sender_id !== currentUser.id) chattedUserIds.add(m.sender_id);
-        if (m.receiver_id !== currentUser.id) chattedUserIds.add(m.receiver_id);
+        if (m.sender_id !== currentUser.id) ids.add(m.sender_id);
+        if (m.receiver_id !== currentUser.id) ids.add(m.receiver_id);
     });
-
-    if (chattedUserIds.size === 0) {
-        inboxList.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">এখনো কোনো মেসেজ নেই। কারো পোস্টে "Message" বাটনে ক্লিক করে চ্যাট শুরু করুন!</p>';
+    if (!ids.size) {
+        inboxList.innerHTML = '<p style="text-align:center;padding:20px;color:#777;">এখনো কোনো মেসেজ নেই। কারো পোস্টে "Message" বাটনে ক্লিক করে চ্যাট শুরু করুন!</p>';
         return;
     }
-
-    // প্রোফাইল থেকে ইউজারদের নাম ও ছবি আনা
-    const { data: profiles } = await sb.from("profiles").select("id, name, avatar_url").in("id", Array.from(chattedUserIds));
-    
+    const { data: profiles } = await sb.from("profiles").select("id, name, avatar_url").in("id", Array.from(ids));
     inboxList.innerHTML = '';
-    if(profiles) {
-        profiles.forEach(profile => {
-            const div = document.createElement("div");
-            div.className = "inbox-item";
-            div.onclick = () => openChatRoom(profile.id, profile.name);
-            div.innerHTML = `
-                <img src="${profile.avatar_url || 'https://via.placeholder.com/50?text=👤'}" class="inbox-avatar">
-                <div style="flex:1;">
-                    <b style="font-size:16px;">${escapeHTML(profile.name)}</b>
-                </div>
-            `;
-            inboxList.appendChild(div);
-        });
-    }
+    (profiles || []).forEach(p => {
+        const div = document.createElement("div");
+        div.className = "inbox-item";
+        div.onclick = () => openChatRoom(p.id, p.name);
+        div.innerHTML = `<img src="${escapeAttr(p.avatar_url || DEFAULT_AVATAR)}" class="inbox-avatar"><div style="flex:1;"><b style="font-size:16px;">${escapeHTML(p.name)}</b></div>`;
+        inboxList.appendChild(div);
+    });
 };
 
-// নির্দিষ্ট কারো সাথে চ্যাট ওপেন করা
-window.openChatRoom = async function(userId, userName) {
+window.openChatRoom = async function(userId, userName){
     currentChatUserId = userId;
     currentChatUserName = userName;
-    
     document.getElementById('inboxView').style.display = 'none';
     document.getElementById('chatRoomView').style.display = 'flex';
     document.getElementById('chatBackBtn').style.display = 'block';
     document.getElementById('chatHeaderName').innerText = userName;
-    
     await loadChatMessages();
-
-    // রিয়েল-টাইম আপডেট চালু করা (Supabase Realtime)
     if (messageSubscription) sb.removeChannel(messageSubscription);
     messageSubscription = sb.channel(`chat-${currentUser.id}-${userId}`)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-          const newMsg = payload.new;
-          if ((newMsg.sender_id === currentUser.id && newMsg.receiver_id === currentChatUserId) ||
-              (newMsg.sender_id === currentChatUserId && newMsg.receiver_id === currentUser.id)) {
-              loadChatMessages(); // নতুন মেসেজ আসলে আবার লোড করবে
-          }
-      })
-      .subscribe();
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+            const m = payload.new;
+            if ((m.sender_id === currentUser.id && m.receiver_id === currentChatUserId) ||
+                (m.sender_id === currentChatUserId && m.receiver_id === currentUser.id)) loadChatMessages();
+        }).subscribe();
 };
 
-// নির্দিষ্ট ইউজারের সাথে মেসেজ লোড করা
-async function loadChatMessages() {
+async function loadChatMessages(){
     const box = document.getElementById('chatMessages');
-    
-    const { data: msgs, error } = await sb.from("messages")
-        .select("*")
+    const { data: msgs, error } = await sb.from("messages").select("*")
         .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUserId}),and(sender_id.eq.${currentChatUserId},receiver_id.eq.${currentUser.id})`)
         .order("created_at", { ascending: true });
-
     if (error) return;
-
     box.innerHTML = "";
     msgs.forEach(msg => {
-        const isMe = msg.sender_id === currentUser.id;
         const div = document.createElement("div");
-        div.className = `msg-bubble ${isMe ? 'msg-sent' : 'msg-received'}`;
+        div.className = "msg-bubble " + (msg.sender_id === currentUser.id ? 'msg-sent' : 'msg-received');
         div.innerText = msg.text;
         box.appendChild(div);
     });
     box.scrollTop = box.scrollHeight;
 }
 
-// মেসেজ পাঠানো
-window.sendMessage = async function() {
+window.sendMessage = async function(){
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
     if (!text || !currentChatUserId) return;
-
     input.value = "";
-    const { error } = await sb.from("messages").insert({
-        sender_id: currentUser.id,
-        receiver_id: currentChatUserId,
-        text: text
-    });
-
-    if (error) { alert("মেসেজ পাঠানো যায়নি!"); return; }
+    const { error } = await sb.from("messages").insert({ sender_id: currentUser.id, receiver_id: currentChatUserId, text });
+    if (error) { alert("মেসেজ পাঠানো যায়নি!"); return; }
     await loadChatMessages();
 };
 
-// হেডারে চ্যাট বাটন যুক্ত করা (আপনার হেডার HTML-এ এটি যোগ করুন)
-// <div class="profile" onclick="openChatOverlay()">💬</div> (এটি Profile আইকনের পাশে দিন)
-
-
-// ================= PUSH NOTIFICATION LOGIC =================
-// আপনার জেনারেট করা পাবলিক কী এখানে বসান
+// ================= PUSH =================
 const VAPID_PUBLIC_KEY = "BNncD-UICpRbWhjGiMg5E6RHjkLEJ3_pqq6xiLi3aju-euoO9aD9IL7Y12D4BuB7hwEtDKi3vRMX01m2nMomQcY";
 
-// পাবলিক কী-কে ব্রাউজার বোঝার মতো ফরম্যাটে রূপান্তর করার ফাংশন
-function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
+function urlBase64ToUint8Array(s){
+    const padding = '='.repeat((4 - s.length % 4) % 4);
+    const raw = window.atob((s + padding).replace(/\-/g, '+').replace(/_/g, '/'));
+    const out = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; ++i) out[i] = raw.charCodeAt(i);
+    return out;
 }
 
-window.subscribeUserToPush = async function() {
-  if (!currentUser) { alert("আগে লগইন করুন।"); return; }
-  
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    alert("আপনার ব্রাউজার নোটিফিকেশন সাপোর্ট করে না।"); return;
-  }
-
-  try {
-    // ১. পারমিশন চাওয়া
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') {
-      alert("নোটিফিকেশন পারমিশন দেননি।"); return;
-    }
-
-    // ২. সার্ভিস ওয়ার্কার রেজিস্ট্রেশন চেক করা
-    const registration = await navigator.serviceWorker.ready;
-    
-    // ৩. সাবস্ক্রিপশন তৈরি করা
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-    });
-
-    // ৪. Supabase-এ সেভ করা
-
-    await sb.from('push_subscriptions').delete().eq('user_id', currentUser.id);
-    const { error } = await sb.from('push_subscriptions').insert({
-      user_id: currentUser.id,
-      subscription: subscription.toJSON()
-    });
-
-    if (error) {
-      if (error.code === '23505') { // অলরেডি সাবস্ক্রাইব করা আছে
-         alert("✅ আপনি ইতিমধ্যে নোটিফিকেশন চালু করেছেন।");
-      } else {
-         throw error;
-      }
-    } else {
-      alert("✅ নোটিফিকেশন সফলভাবে চালু হয়েছে!");
-      document.getElementById('btnEnableNotifications').style.display = 'none'; // বাটন লুকিয়ে ফেলা
-    }
-
-  } catch (error) {
-    console.error("Notification Error:", error);
-    alert("নোটিফিকেশন চালু করা যায়নি: " + error.message);
-  }
-};
-  
-
-window.openTransactionHistory = async function() {
+window.subscribeUserToPush = async function(){
     if (!currentUser) { alert("আগে লগইন করুন।"); return; }
-    
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) { alert("আপনার ব্রাউজার নোটিফিকেশন সাপোর্ট করে না।"); return; }
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') { alert("নোটিফিকেশন পারমিশন দেননি।"); return; }
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+        await sb.from('push_subscriptions').delete().eq('user_id', currentUser.id);
+        const { error } = await sb.from('push_subscriptions').insert({ user_id: currentUser.id, subscription: subscription.toJSON() });
+        if (error) throw error;
+        alert("✅ নোটিফিকেশন সফলভাবে চালু হয়েছে!");
+        document.getElementById('btnEnableNotifications').style.display = 'none';
+    } catch (error) { console.error("Notification Error:", error); alert("নোটিফিকেশন চালু করা যায়নি: " + error.message); }
+};
+
+// ================= TRANSACTIONS / TRANSFER =================
+window.openTransactionHistory = async function(){
+    if (!currentUser) { alert("আগে লগইন করুন।"); return; }
     document.getElementById('historyModal').style.display = 'flex';
     const list = document.getElementById('historyList');
-    list.innerHTML = '<p style="text-align:center; color:#777;">লোড হচ্ছে...</p>';
-
+    list.innerHTML = '<p style="text-align:center;color:#777;">লোড হচ্ছে...</p>';
     try {
-        const { data, error } = await sb.from('coin_transactions')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false });
-
+        const { data, error } = await sb.from('coin_transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
         if (error) throw error;
-
         list.innerHTML = '';
-        if (!data || data.length === 0) {
-            list.innerHTML = '<p style="text-align:center; color:#777; padding:20px;">এখনো কোনো লেনদেন হয়নি।</p>';
-            return;
-        }
-
+        if (!data || !data.length) { list.innerHTML = '<p style="text-align:center;color:#777;padding:20px;">এখনো কোনো লেনদেন হয়নি।</p>'; return; }
         data.forEach(tx => {
-            const isPositive = tx.amount > 0;
-            const color = isPositive ? '#28a745' : '#dc3545'; // সবুজ (প্লাস) বা লাল (মাইনাস)
-            const sign = isPositive ? '+' : '';
-            const date = new Date(tx.created_at).toLocaleString('bn-BD');
-
+            const pos = tx.amount > 0;
             const div = document.createElement('div');
-            div.style.cssText = 'padding:12px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;';
+            div.style.cssText = 'padding:12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;';
             div.innerHTML = `
                 <div>
-                    <div style="font-weight:bold; color:#333; font-size:14px;">${escapeHTML(tx.description || 'লেনদেন')}</div>
-                    <div style="font-size:11px; color:#777; margin-top:4px;">${date}</div>
+                    <div style="font-weight:bold;color:#333;font-size:14px;">${escapeHTML(tx.description || 'লেনদেন')}</div>
+                    <div style="font-size:11px;color:#777;margin-top:4px;">${new Date(tx.created_at).toLocaleString('bn-BD')}</div>
                 </div>
-                <div style="font-weight:bold; color:${color}; font-size:16px; white-space:nowrap;">${sign}${tx.amount} 🪙</div>
-            `;
+                <div style="font-weight:bold;color:${pos ? '#28a745' : '#dc3545'};font-size:16px;white-space:nowrap;">${pos ? '+' : ''}${escapeHTML(tx.amount)} 🪙</div>`;
             list.appendChild(div);
         });
-
-    } catch (err) {
-        console.error(err);
-        list.innerHTML = 'লোড করা যায়নি: ' + err.message;
-    }
+    } catch (err) { console.error(err); list.innerHTML = 'লোড করা যায়নি: ' + escapeHTML(err.message); }
 };
 
-
-window.openTransferModal = function() {
+window.openTransferModal = function(){
     if (!currentUser) { alert("আগে লগইন করুন।"); return; }
     if (!currentChatUserId) { alert("প্রথমে কারো সাথে চ্যাট ওপেন করুন।"); return; }
-    
     document.getElementById('transferReceiverName').innerText = "প্রাপক: " + currentChatUserName;
     document.getElementById('transferAmount').value = "";
     document.getElementById('transferModal').style.display = 'flex';
 };
+window.closeTransferModal = function(){ document.getElementById('transferModal').style.display = 'none'; };
 
-window.closeTransferModal = function() {
-    document.getElementById('transferModal').style.display = 'none';
-};
-
-window.executeCoinTransfer = async function() {
-    const amount = parseInt(document.getElementById('transferAmount').value);
-    
-    if (!amount || amount <= 0) {
-        alert("❌ সঠিক পরিমাণ লিখুন (কমপক্ষে ১ কয়েন)।");
-        return;
-    }
-
+window.executeCoinTransfer = async function(){
+    const amount = parseInt(document.getElementById('transferAmount').value, 10);
+    if (!amount || amount <= 0) { alert("❌ সঠিক পরিমাণ লিখুন (কমপক্ষে ১ কয়েন)।"); return; }
     if (!confirm(`${amount} কয়েন ${currentChatUserName}-কে পাঠাতে চান?`)) return;
-
     try {
-        // Supabase RPC কল করা (আপনার তৈরি করা SQL ফাংশনটি)
-        const { data, error } = await sb.rpc('transfer_coins', {
-            p_receiver_id: currentChatUserId,
-            p_amount: amount
-        });
-
-        if (error) {
-            let errorMsg = error.message || "কয়েন পাঠানো যায়নি।";
-            errorMsg = errorMsg.replace('ERROR: ', '').replace('P0001: ', ''); 
-            alert("❌ " + errorMsg);
-            return;
-        }
-
+        const { data, error } = await sb.rpc('transfer_coins', { p_receiver_id: currentChatUserId, p_amount: amount });
+        if (error) { alert("❌ " + (error.message || "কয়েন পাঠানো যায়নি।").replace('ERROR: ', '').replace('P0001: ', '')); return; }
         if (data === 'SUCCESS') {
             alert(`✅ সফলভাবে ${amount} কয়েন পাঠানো হয়েছে!`);
             closeTransferModal();
-            await updateHeaderCoinCount(); // হেডারের কয়েন আপডেট
-            await loadProfile(); // প্রোফাইল আপডেট
+            await updateHeaderCoinCount();
+            await loadProfile();
         }
-    } catch (err) {
-        console.error("Transfer Error:", err);
-        alert("❌ কয়েন পাঠানো যায়নি: " + err.message);
-    }
+    } catch (err) { console.error("Transfer Error:", err); alert("❌ কয়েন পাঠানো যায়নি: " + err.message); }
 };
 
+// ================= AD REWARD =================
+const ADSTERRA_SMARTLINK = "https://asiafilm.org/4/9675ec9303a358022b0d819d635a669d";
+const MAX_DAILY_CLICKS = 5, REWARD_COINS = 5;
+const adBtn = document.getElementById("watch-ad-btn");
+const adStatus = document.getElementById("ad-status");
 
-
-
-    const ADSTERRA_SMARTLINK = " https://asiafilm.org/4/9675ec9303a358022b0d819d635a669d "; // আপনার অ্যাড লিংক দিন
-    const MAX_DAILY_CLICKS = 5;
-    const REWARD_COINS = 5;
-    
-    const btn = document.getElementById("watch-ad-btn");
-    const statusText = document.getElementById("ad-status");
-
-    async function checkAdAvailability() {
-        if (!currentUser) {
-            btn.disabled = true; btn.innerText = "আগে লগইন করুন"; return;
-        }
-        
-        const { data, error } = await sb.from('profiles').select('ad_clicks_today, last_ad_timestamp').eq('id', currentUser.id).single();
-        if (error || !data) return;
-
-        const todayStr = new Date().toISOString().split('T')[0];
-        // ডেইলি কাউন্ট রিসেট লজিক (যদি পুরোনো দিন হয়)
-        // (সরলতার জন্য এখানে শুধু লিমিট চেক করা হচ্ছে)
-        
-        if (data.ad_clicks_today >= MAX_DAILY_CLICKS) {
-            btn.disabled = true; btn.style.backgroundColor = "#6c757d"; btn.innerText = "আজকের লিমিট শেষ";
-            statusText.innerText = "আগামীকাল আবার আসুন!"; return;
-        }
-
-        const now = Date.now();
-        const timePassedMin = (now - (data.last_ad_timestamp || 0)) / 60000;
-        if (data.last_ad_timestamp > 0 && timePassedMin < 30) {
-            btn.disabled = true; btn.style.backgroundColor = "#ffc107"; btn.style.color = "#000";
-            btn.innerText = `অপেক্ষা করুন (${Math.ceil(30 - timePassedMin)} মিনিট)`;
-            statusText.innerText = `আজকে দেখা হয়েছে: ${data.ad_clicks_today}/${MAX_DAILY_CLICKS} বার`;
-            return;
-        }
-
-        btn.disabled = false; btn.style.backgroundColor = "#28a745"; btn.style.color = "#fff";
-        btn.innerText = `🎬 বিজ্ঞাপন দেখে ${REWARD_COINS} কয়েন নিন`;
-        statusText.innerText = `আজকের বাকি সুযোগ: ${MAX_DAILY_CLICKS - data.ad_clicks_today} বার`;
+async function checkAdAvailability(){
+    if (!currentUser) { adBtn.disabled = true; adBtn.innerText = "আগে লগইন করুন"; return; }
+    const { data, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+    if (error || !data) return;
+    const today = new Date().toISOString().split('T')[0];
+    const clicks = (data.ad_day && String(data.ad_day) !== today) ? 0 : (data.ad_clicks_today || 0);
+    if (clicks >= MAX_DAILY_CLICKS) {
+        adBtn.disabled = true; adBtn.style.backgroundColor = "#6c757d"; adBtn.style.color = "#fff";
+        adBtn.innerText = "আজকের লিমিট শেষ"; adStatus.innerText = "আগামীকাল আবার আসুন!";
+        return;
     }
-
-    function startAdWatch() {
-        window.open(ADSTERRA_SMARTLINK, "_blank");
-        btn.disabled = true; btn.style.backgroundColor = "#17a2b8";
-        let secondsLeft = 15;
-        btn.innerText = `বিজ্ঞাপন চলছে... (${secondsLeft}s)`;
-
-        const timer = setInterval(() => {
-            secondsLeft--;
-            btn.innerText = `বিজ্ঞাপন চলছে... (${secondsLeft}s)`;
-            if (secondsLeft <= 0) {
-                clearInterval(timer);
-                completeAdReward();
-            }
-        }, 1000);
+    const passedMin = (Date.now() - (data.last_ad_timestamp || 0)) / 60000;
+    if (data.last_ad_timestamp > 0 && passedMin < 30) {
+        adBtn.disabled = true; adBtn.style.backgroundColor = "#ffc107"; adBtn.style.color = "#000";
+        adBtn.innerText = `অপেক্ষা করুন (${Math.ceil(30 - passedMin)} মিনিট)`;
+        adStatus.innerText = `আজকে দেখা হয়েছে: ${clicks}/${MAX_DAILY_CLICKS} বার`;
+        return;
     }
+    adBtn.disabled = false; adBtn.style.backgroundColor = "#28a745"; adBtn.style.color = "#fff";
+    adBtn.innerText = `🎬 বিজ্ঞাপন দেখে ${REWARD_COINS} কয়েন নিন`;
+    adStatus.innerText = `আজকের বাকি সুযোগ: ${MAX_DAILY_CLICKS - clicks} বার`;
+}
 
-    async function completeAdReward() {
-        btn.innerText = "কয়েন যোগ হচ্ছে...";
-        // সরাসরি আপডেট না করে SQL ফাংশন কল করা হচ্ছে (যাতে হ্যাক না হয়)
-        const { data, error } = await sb.rpc('claim_ad_reward');
-        
-        if (error) {
-            alert("❌ " + error.message.replace('ERROR: ', ''));
-        } else if (data === 'SUCCESS') {
-            alert(`✅ অভিনন্দন! আপনার ${REWARD_COINS} কয়েন যোগ হয়েছে!`);
-            if(typeof updateHeaderCoinCount === 'function') updateHeaderCoinCount();
-        }
-        checkAdAvailability();
-    }
+window.startAdWatch = async function(){
+    adBtn.disabled = true; adBtn.style.backgroundColor = "#17a2b8";
+    try { await sb.rpc('start_ad_watch'); } catch (e) { console.error(e); }
+    window.open(ADSTERRA_SMARTLINK, "_blank");
+    let left = 15;
+    adBtn.innerText = `বিজ্ঞাপন চলছে... (${left}s)`;
+    const timer = setInterval(() => {
+        left--;
+        adBtn.innerText = `বিজ্ঞাপন চলছে... (${left}s)`;
+        if (left <= 0) { clearInterval(timer); completeAdReward(); }
+    }, 1000);
+};
 
-    // অ্যাপ লোড হলে চেক করবে
-    window.addEventListener("load", () => {
-        if (currentUser) setTimeout(checkAdAvailability, 1500);
-    });
+async function completeAdReward(){
+    adBtn.innerText = "কয়েন যোগ হচ্ছে...";
+    const { data, error } = await sb.rpc('claim_ad_reward');
+    if (error) alert("❌ " + error.message.replace('ERROR: ', ''));
+    else if (data === 'SUCCESS') { alert(`✅ অভিনন্দন! আপনার ${REWARD_COINS} কয়েন যোগ হয়েছে!`); updateHeaderCoinCount(); }
+    checkAdAvailability();
+}
 
+// ================= SHOP =================
+let allProducts = [], currentOrderProductId = null;
 
-  
-let allProducts = []; // সব প্রোডাক্ট সেভ রাখার জন্য
-let currentOrderProductId = null;
-
-// ১. শপ ওপেন করা ও প্রোডাক্ট লোড করা
-window.openShop = async function() {
+window.openShop = async function(){
+    document.getElementById('feed').style.display = 'none';
+    document.querySelector('.categories').style.display = 'none';
+    document.querySelector('.upload-box').classList.remove('show');
     document.getElementById('shopSection').style.display = 'block';
-    // চাইলে এখানে আপনার অন্যান্য সেকশনগুলো (যেমন feed) লুকিয়ে দিতে পারেন
-    
     const grid = document.getElementById('productGrid');
-    grid.innerHTML = '<p style="grid-column: span 2; text-align:center;">লোড হচ্ছে...</p>';
-
+    grid.innerHTML = '<p style="grid-column:span 2;text-align:center;">লোড হচ্ছে...</p>';
     const { data, error } = await sb.from('products').select('*').eq('is_active', true).order('created_at', { ascending: false });
-    
     if (error) { grid.innerHTML = '<p>লোড করা যায়নি।</p>'; return; }
-    
     allProducts = data || [];
     renderProducts(allProducts);
 };
 
-// ২. প্রোডাক্ট কার্ড তৈরি করা
-function renderProducts(products) {
+function renderProducts(products){
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
-    
-    if (products.length === 0) {
-        grid.innerHTML = '<p style="grid-column: span 2; text-align:center;">কোনো পণ্য নেই।</p>';
-        return;
-    }
-
+    if (!products.length) { grid.innerHTML = '<p style="grid-column:span 2;text-align:center;">কোনো পণ্য নেই।</p>'; return; }
     products.forEach(prod => {
         const card = document.createElement('div');
-        card.style.cssText = 'background:white; border-radius:10px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);';
+        card.style.cssText = 'background:white;border-radius:10px;padding:10px;box-shadow:0 2px 5px rgba(0,0,0,.1);';
         card.innerHTML = `
-            <img src="${prod.image_url}" style="width:100%; height:140px; object-fit:cover; border-radius:8px;">
-            <div style="font-size:12px; color:#888; margin-top:5px;">${prod.category}</div>
-            <div style="font-weight:bold; font-size:14px; margin:5px 0; height:38px; overflow:hidden;">${prod.name}</div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                <span style="color:#ff007f; font-weight:bold; font-size:16px;">৳ ${prod.price}</span>
-                <button onclick="openOrderModal('${prod.id}', '${escapeHTML(prod.name)}', ${prod.price})" style="background:#ff5722; color:white; border:none; padding:6px 12px; border-radius:5px; font-size:12px; cursor:pointer;">কিনুন</button>
-            </div>
-        `;
+            <img class="p-img" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
+            <div class="p-cat" style="font-size:12px;color:#888;margin-top:5px;"></div>
+            <div class="p-name" style="font-weight:bold;font-size:14px;margin:5px 0;height:38px;overflow:hidden;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                <span class="p-price" style="color:#ff007f;font-weight:bold;font-size:16px;"></span>
+                <button class="p-buy" style="background:#ff5722;color:white;border:none;padding:6px 12px;border-radius:5px;font-size:12px;cursor:pointer;">কিনুন</button>
+            </div>`;
+        card.querySelector('.p-img').src = prod.image_url || DEFAULT_AVATAR;
+        card.querySelector('.p-cat').textContent = prod.category || '';
+        card.querySelector('.p-name').textContent = prod.name || '';
+        card.querySelector('.p-price').textContent = '৳ ' + prod.price;
+        card.querySelector('.p-buy').onclick = () => openOrderModal(prod.id, prod.name, prod.price);
         grid.appendChild(card);
     });
 }
 
-// ৩. ক্যাটাগরি ফিল্টার
-window.filterShop = function(category) {
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.style.background = 'white';
-        btn.style.color = 'black';
-    });
-    event.target.style.background = '#ff5722';
-    event.target.style.color = 'white';
-
-    if (category === 'All') {
-        renderProducts(allProducts);
-    } else {
-        const filtered = allProducts.filter(p => p.category === category);
-        renderProducts(filtered);
-    }
+window.filterShop = function(category, btn){
+    document.querySelectorAll('.cat-btn').forEach(b => { b.style.background = 'white'; b.style.color = 'black'; });
+    btn.style.background = '#ff5722';
+    btn.style.color = 'white';
+    renderProducts(category === 'All' ? allProducts : allProducts.filter(p => p.category === category));
 };
 
-// ৪. অর্ডার মডাল ওপেন করা
-window.openOrderModal = function(id, name, price) {
+window.openOrderModal = function(id, name, price){
     if (!currentUser) { alert("অর্ডার করতে আগে লগইন করুন।"); return; }
     currentOrderProductId = id;
     document.getElementById('orderProductName').innerText = name;
@@ -1794,141 +1265,73 @@ window.openOrderModal = function(id, name, price) {
     document.getElementById('orderModal').style.display = 'flex';
 };
 
-// ৫. অর্ডার সাবমিট করা
-window.submitOrder = async function() {
+window.submitOrder = async function(){
     const name = document.getElementById('buyerName').value.trim();
     const phone = document.getElementById('buyerPhone').value.trim();
     const address = document.getElementById('buyerAddress').value.trim();
     const price = parseFloat(document.getElementById('orderProductPrice').innerText);
-
     if (!name || !phone || !address) { alert("সব তথ্য পূরণ করুন।"); return; }
-
     const { error } = await sb.from('orders').insert({
-        user_id: currentUser.id,
-        product_id: currentOrderProductId,
-        buyer_name: name,
-        phone: phone,
-        address: address,
-        total_price: price,
-        status: 'pending'
+        user_id: currentUser.id, product_id: currentOrderProductId,
+        buyer_name: name, phone, address, total_price: price, status: 'pending'
     });
-
-    if (error) {
-        alert("❌ অর্ডার করা যায়নি: " + error.message);
-    } else {
-        alert("✅ অর্ডার সফল হয়েছে! আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।");
-        document.getElementById('orderModal').style.display = 'none';
-    }
+    if (error) alert("❌ অর্ডার করা যায়নি: " + error.message);
+    else { alert("✅ অর্ডার সফল হয়েছে! আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।"); document.getElementById('orderModal').style.display = 'none'; }
 };
+</script>
 
-
-
-window.showAll = function(){ 
-    document.getElementById('shopSection').style.display = 'none'; // শপ লুকানো
-    document.getElementById('feed').style.display = 'grid'; // পোস্ট দেখানো
-    document.querySelector('.categories').style.display = 'flex'; // ক্যাটাগরি দেখানো
-    document.querySelectorAll(".card").forEach(c => c.style.display = ""); 
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){
+        navigator.serviceWorker.register('/sw.js').then(
+            r => console.log('SW registered:', r.scope),
+            e => console.log('SW failed:', e)
+        );
+    });
 }
 
-
-  
-</script>
-
-    <!-- Service Worker রেজিস্ট্রেশন -->
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      // নিশ্চিত করুন আপনার সার্ভারে 'sw.js' ফাইলটি আপলোড করা আছে
-      navigator.serviceWorker.register('/sw.js').then(function(registration) {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, function(err) {
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    });
-  }
-</script>
-
-
-<script>
-  let deferredPrompt;
-  const installBtn = document.getElementById('installAppBtn');
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // ব্রাউজারের ডিফল্ট পপ-আপ বন্ধ করে নিজের বাটন দেখানো
+let deferredPrompt;
+const installBtn = document.getElementById('installAppBtn');
+window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     deferredPrompt = e;
-    if (installBtn) {
-      installBtn.removeAttribute('hidden'); // বাটনটি দৃশ্যমান করা
-    }
-  });
+    installBtn.removeAttribute('hidden');
+});
+installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    installBtn.setAttribute('hidden', '');
+});
+window.addEventListener('appinstalled', () => installBtn.setAttribute('hidden', ''));
 
-  if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt(); // ইনস্টল পপ-আপ দেখানো
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User response to the install prompt: ${outcome}`);
-      deferredPrompt = null;
-      installBtn.setAttribute('hidden', ''); // ব্যবহারের পর বাটন লুকানো
-    });
-  }
-
-  // ইউজার অ্যাপটি ইনস্টল করলে বাটনটি সরিয়ে ফেলা
-  window.addEventListener('appinstalled', () => {
-    if (installBtn) installBtn.setAttribute('hidden', '');
-  });
-
-
-// শেয়ার করা ডাটা থাকলে অটোমেটিক ফর্ম ফিল হবে
+// শেয়ার করা ডাটা থাকলে অটোমেটিক ফর্ম ফিল
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
-    
-    // ১. URL থেকে ডাটা নিয়ে সেভ করে রাখা (যাতে রিলোড দিলেও না হারায়)
     if (params.has('shared_title') || params.has('shared_text') || params.has('shared_url')) {
-        const sharedData = {
-            title: params.get('shared_title') || '',
-            text: params.get('shared_text') || '',
-            url: params.get('shared_url') || ''
-        };
-        sessionStorage.setItem('pwa_shared_data', JSON.stringify(sharedData));
+        try {
+            sessionStorage.setItem('pwa_shared_data', JSON.stringify({
+                title: params.get('shared_title') || '', text: params.get('shared_text') || '', url: params.get('shared_url') || ''
+            }));
+        } catch (e) {}
         window.history.replaceState({}, document.title, "/");
     }
-
-    // ২. সেশন স্টোরেজ থেকে ডাটা নিয়ে ফর্ম ফিল করা
-    const savedData = sessionStorage.getItem('pwa_shared_data');
-    if (savedData) {
-        const data = JSON.parse(savedData);
-        
-        const uploadBox = document.querySelector(".upload-box");
-        if (uploadBox) uploadBox.classList.add("show");
-
-        const titleInput = document.getElementById("postTitle");
-        const descInput = document.getElementById("postDescription");
-
-        let finalTitle = data.title || (data.text.length < 50 ? data.text : ''); 
-        let finalDesc = data.text || '';
-        
-        if (data.url) {
-            if (!finalDesc.includes(data.url)) {
-                finalDesc += (finalDesc ? "\n" : "") + data.url;
-            }
-        }
-
-        if (titleInput) titleInput.value = finalTitle.trim();
-        if (descInput) descInput.value = finalDesc.trim();
-        
-        // ফর্ম ফিল হওয়ার পর ডাটা মুছে ফেলা
-        sessionStorage.removeItem('pwa_shared_data');
-        
-        // স্ক্রল করে ফর্মের দিকে নিয়ে যাওয়া
-        if (uploadBox) uploadBox.scrollIntoView({behavior:"smooth", block:"start"});
+    let saved = null;
+    try { saved = sessionStorage.getItem('pwa_shared_data'); } catch (e) {}
+    if (saved) {
+        const data = JSON.parse(saved);
+        const box = document.querySelector(".upload-box");
+        box.classList.add("show");
+        let title = data.title || (data.text.length < 50 ? data.text : '');
+        let desc = data.text || '';
+        if (data.url && !desc.includes(data.url)) desc += (desc ? "\n" : "") + data.url;
+        document.getElementById("postTitle").value = title.trim();
+        document.getElementById("postDescription").value = desc.trim();
+        try { sessionStorage.removeItem('pwa_shared_data'); } catch (e) {}
+        box.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 });
-    
 </script>
-
-    
 </body>
 </html>
-
-
